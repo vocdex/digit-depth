@@ -1,6 +1,6 @@
 # GUI for DIGIT tactile sensor
 This GUI allows you:
-- to collect image frames from DIGIT and annotate circles in them.
+- Collect image frames from DIGIT and annotate circles in them.
 - Saves the annotated frames to a csv file.
 - Trains a baseline MLP model for RGB to Gradient mapping.
 - Uses Fast Poisson Solver to generate depth maps in real time.
