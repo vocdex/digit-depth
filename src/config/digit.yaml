@@ -1,9 +1,11 @@
+model_path: "models/checkpoints/mlp_depth.ckpt"
 visualize:
-  points3d: False
-  contact_area: True
-  save_video: False
-  plot_depth: False
-
+  depth:
+    enabled: True
+    compute_type: "cuda"
+  point3d:
+    enabled: True
+    compute_type: "cuda"
 sensor:
   mesh_name: adigit.STL
 
@@ -27,4 +29,3 @@ sensor:
 
   gel_width: 0.01835  # gel width (y-axis) in meters //original: 0.02
   gel_height: 0.02490 # gel height (x-axis) in meters //original: 0.03
-model_path: "models/checkpoints/mlp_depth.ckpt"

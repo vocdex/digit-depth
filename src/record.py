@@ -4,7 +4,6 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 import cv2
 
-
 class MainWindow(QWidget):
     def __init__(self):
         super(MainWindow, self).__init__()
@@ -41,7 +40,7 @@ class Worker1(QThread):
                 Image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                 FlippedImage = cv2.flip(Image, 1)
                 ConvertToQtFormat = QImage(FlippedImage.data, FlippedImage.shape[1], FlippedImage.shape[0], QImage.Format_RGB888)
-                Pic = ConvertToQtFormat.scaled(640, 480, Qt.KeepAspectRatio)
+                Pic = ConvertToQtFormat.scaled(320, 240, Qt.KeepAspectRatio)
                 self.ImageUpdate.emit(Pic)
     def stop(self):
         self.ThreadActive = False
