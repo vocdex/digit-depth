@@ -1,4 +1,30 @@
-serial_num: "D00001"
-width: 240
-height: 320
-fps
+visualize:
+  points3d: False
+  contact_area: True
+  save_video: False
+  plot_depth: False
+
+sensor:
+  mesh_name: adigit.STL
+
+  T_cam_offset: [[2.22e-16, 2.22e-16, -1.00e+00, 0.00e+00],
+                [-1.00e+00, 0.00e+00, -2.22e-16, 0.00e+00],
+                [0.00e+00, 1.00e+00, 2.22e-16, 1.50e-02],
+                [0.00e+00, 0.00e+00, 0.00e+00, 1.00e+00]]
+
+  P:  [[2.30940108e+00, 0.00000000e+00, 0.00000000e+00, 0.00000000e+00],
+       [0.00000000e+00, 1.73205081e+00, 0.00000000e+00, 0.00000000e+00],
+       [0.00000000e+00, 0.00000000e+00, -1.04081633e+00, -2.04081633e-03],
+       [0.00000000e+00, 0.00000000e+00, -1.00000000e+00, 0.00000000e+00]]
+  view_params:
+    fov: 60
+    front: [ -0.1, 0.1, 0.1 ]
+    lookat: [-0.001, -0.01, 0.01 ]
+    up: [ 0.04, -0.05, 0.190 ]
+    zoom: 2.5
+  z_near: 0.001
+  z_far: 0.05
+
+  gel_width: 0.01835  # gel width (y-axis) in meters //original: 0.02
+  gel_height: 0.02490 # gel height (x-axis) in meters //original: 0.03
+model_path: "models/checkpoints/mlp_depth.ckpt"
