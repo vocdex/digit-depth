@@ -1,9 +1,12 @@
+import glob
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QApplication, QMainWindow
 import sys
 import cv2
 import math
-import numpy as np
+import csv
+
+
 def window():
     app=QApplication(sys.argv)
     win=QMainWindow()
@@ -14,9 +17,13 @@ def window():
     label.move(100,100)
     win.show()
     sys.exit(app.exec_()) # this will make the program to run until the user closes the window
+
 center_x,center_y = [],[]
 circumference_x,circumference_y= [],[]
 radii=[]
+columns=['img_name', 'center_x', 'center_y', 'radius']
+filename='csv/annotate.csv'
+
 def click_and_store(event,x,y,flags,param):
     global center_x, center_y, circumference_x, circumference_y, radius
     if event==cv2.EVENT_LBUTTONDOWN:
@@ -37,40 +44,22 @@ def click_and_store(event,x,y,flags,param):
         radii.append(int(radius))
         cv2.circle(image,(center_x[0],center_y[0]),int(radius),(255,100,255),-1)
         cv2.imshow('image',image)
+    with open(filename, 'a') as csv_file:
+        if event != cv2.EVENT_MOUSEMOVE:
+            if center_x and center_y and circumference_x and circumference_y and radii:
+               writer = csv.writer(csv_file)
+               writer.writerow([center_x[0], center_y[0], radii[0]])
+               center_x.pop()
+               center_y.pop()
+               circumference_x.pop()
+               circumference_y.pop()
+               radii.pop()
+
 if __name__=='__main__':
-    # window()
-    image=cv2.imread(r'/Users/shuk/PycharmProjects/digit-depth/sample_ball.png')
-    cv2.imshow('image',image)
-    cv2.setMouseCallback('image',click_and_store,image)
-    cv2.waitKey(0)
+    img_files=sorted(glob.glob(f'qt_images/*.png'))
+    for img in img_files:
+        image=cv2.imread(img)
+        cv2.imshow('image',image)
+        cv2.setMouseCallback('image',click_and_store,image)
+        cv2.waitKey(0)
     cv2.destroyAllWindows()
-"""
-drawing = False # true if mouse is pressed
-ix,iy = -1,-1
-# mouse callback function
-def draw_circle(event,x,y,flags,param):
-    global ix,iy,drawing
-    if event == cv2.EVENT_LBUTTONDOWN:
-        drawing = True
-        ix,iy = x,y
-    elif event == cv2.EVENT_MOUSEMOVE:
-        if drawing == True:
-             k = cv2.waitKey(1)
-             if k == ord('r'):
-                print("hi")
-                cv2.rectangle(img,(ix,iy),(x,y),(0,255,0),-1)
-             elif k==ord('c'):
-                cv2.circle(img,(int((ix+x)/2), int((iy+y)/2)),int(math.sqrt( ((ix-x)**2)+((iy-y)**2) )),(0,0,255),-1)
-             elif k== ord('l'):
-                cv2.line(img,(ix,iy),(x,y),(255,0,0),5)
-    elif event == cv2.EVENT_LBUTTONUP:
-        drawing = False
-img = cv2.imread(r'/Users/shuk/PycharmProjects/digit-depth/sample_ball.png')
-cv2.namedWindow('image')
-cv2.setMouseCallback('image',draw_circle)
-while(1):
-    cv2.imshow('image',img)
-    k = cv2.waitKey(1) & 0xFF
-    if k == 27:
-        break
-"""
