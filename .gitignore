@@ -4,3 +4,10 @@ digit/__pycache__/
 /*.egg-info
 /dist/
 *.pyc
+.vscode/
+.mypy_cache/
+__pycache__/
+*.pyc
+*.csv
+*.pth
+*.jpg
