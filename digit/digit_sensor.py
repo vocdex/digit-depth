@@ -1,7 +1,8 @@
 from digit_interface import Digit
 import time
-
-
+import cv2
+import typing
+from digit_interface.digit import DigitDefaults
 class DigitSensor():
     def __init__(self,fps: int,resolution: str,serial_num: str):
         self.fps=fps
@@ -10,11 +11,13 @@ class DigitSensor():
 
     def __call__(self, *args, **kwargs):
         """Calls the digit sensor."""
-        digit = self.setup_digit(self.serial_num, self.fps)
+        digit = self.setup_digit()
         return digit
 
     def setup_digit(self,):
         """Sets up the digit sensor and returns it."""
+
+
         digit = Digit(self.serial_num)
         digit.connect()
 
@@ -24,7 +27,8 @@ class DigitSensor():
             digit.set_intensity_rgb(*rgb)
             time.sleep(1)
         digit.set_intensity(15)
-        fps=Digit.STREAMS["QVGA"]["fps"][str(self.fps)+"fps"]
+        resolution=DigitDefaults.STREAMS[self.resolution]
+        digit.set_resolution(resolution)
+        fps=Digit.STREAMS[self.resolution]["fps"][str(self.fps)+"fps"]
         digit.set_fps(fps)
         return digit
-
