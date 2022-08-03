@@ -1,5 +1,5 @@
 import unittest
-from digit import DigitSensor
+from src.digit import DigitSensor
 from digit_interface import Digit
 
 class TestDigit(unittest.TestCase):
