@@ -7,5 +7,5 @@ setup(name='digit-depth',
       author='Shukrullo Nazirjonov',
       author_email="nazirjonovsh2000@gmail.com",
       license='MIT',
-      packages=['scripts','src'],
+      packages=['src/digit','src/third_party','src'],
       zip_safe=False)
