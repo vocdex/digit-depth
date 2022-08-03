@@ -13,7 +13,7 @@ class DigitSensor():
         digit = self.setup_digit(self.serial_num, self.fps)
         return digit
 
-    def setup_digit(self,serial_num: str, fps: int):
+    def setup_digit(self,):
         """Sets up the digit sensor and returns it."""
         digit = Digit(self.serial_num)
         digit.connect()

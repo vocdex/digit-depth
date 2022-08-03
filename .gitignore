@@ -1,1 +1,3 @@
 .idea
+src/__pycache__/
+src/digit/__pycache__/
