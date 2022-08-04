@@ -1,14 +1,13 @@
 # Copyright (c) Facebook, Inc. and its affiliates.
 
-import numpy as np
-import torch
-
-import open3d as o3d
 import copy
 
-from scipy import ndimage
-from poisson import poisson_reconstruct
+import numpy as np
+import open3d as o3d
+import torch
 import vis_utils as vis_utils
+from poisson import poisson_reconstruct
+from scipy import ndimage
 
 """
 Common functions

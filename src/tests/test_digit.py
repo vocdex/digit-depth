@@ -1,6 +1,8 @@
 import unittest
-from digit.digit_sensor import DigitSensor
+
 from digit_interface import Digit
+
+from digit.digit_sensor import DigitSensor
 
 
 class TestDigit(unittest.TestCase):

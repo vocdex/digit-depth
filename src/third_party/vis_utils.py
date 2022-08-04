@@ -1,20 +1,17 @@
 # Copyright (c) Facebook, Inc. and its affiliates.
 
-import numpy as np
-import cv2
 import copy
-
-import torch
+import logging
 import time
-import open3d as o3d
-from attrdict import AttrDict
-
 import types
 
+import cv2
 import matplotlib.pyplot as plt
-from matplotlib.patches import Rectangle, Circle
-
-import logging
+import numpy as np
+import open3d as o3d
+import torch
+from attrdict import AttrDict
+from matplotlib.patches import Circle, Rectangle
 
 log = logging.getLogger(__name__)
 

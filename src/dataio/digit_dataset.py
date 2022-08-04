@@ -1,21 +1,24 @@
+import glob
+
+import pandas as pd
+import torch
 from PIL import Image
 from torch.utils.data import Dataset
-import torch
-import pandas as pd
-import glob
 
 
 class DigitRealImageAnnotDataset(Dataset):
     def __init__(self, dir_dataset, transform=None, annot_flag=True, img_type='png'):
         self.dir_dataset = dir_dataset
+        print(f"Loading dataset from {dir_dataset}")
         self.transform = transform
         self.annot_flag = annot_flag
 
-        # a list of image paths sorted. dir_dataset is the root dir of the dataset (color)
+        # a list of image paths sorted. dir_dataset is the root dir of the datasets (color)
         self.img_files = sorted(glob.glob(f"{self.dir_dataset}/*.{img_type}"))
+        print(f"Found {len(self.img_files)} images")
         if self.annot_flag:
-            annot_file = "/home/shuk/digits2/tactile-in-hand/annotated_dataset/0001/color/sphere.csv"
-            self.annot_dataframe = pd.read_csv(annot_file,sep=';')
+            annot_file = "/home/shuk/digit-depth/csv/annotate.csv"
+            self.annot_dataframe = pd.read_csv(annot_file,sep=',')
 
     def __getitem__(self, idx):
         """ Returns a tuple of (img, annot) where annot is a tensor of shape (3,1)"""

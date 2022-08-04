@@ -3,10 +3,12 @@ Script for capturing individual frames while the camera output is displayed.
 -- Press SPACEBAR to capture
 -- Press ESC to terminate the program.
 """
-import cv2
+import argparse
 import os
 import os.path
-import argparse
+
+import cv2
+
 from src.digit.digit_sensor import DigitSensor
 
 
@@ -35,7 +37,7 @@ if __name__ == "__main__":
     argparser.add_argument('--fps',type=int,default=30)
     argparser.add_argument('--resolution',type=str,default="QVGA")
     argparser.add_argument('--serial_num',type=str,default="D20001")
-    argparser.add_argument('--dir_name',type=str,default="digit_depth/qt_images")
+    argparser.add_argument('--dir_name',type=str,default="digit_depth/images")
     args=argparser.parse_args()
     if not os.path.exists(args.dir_name):
         os.makedirs(args.dir_name)

@@ -1,0 +1,34 @@
+prefix: ""
+random_seed: 0
+save_csv: False
+visualize:
+  normals: True
+  points3d: False
+
+dataloader:
+  batch_size: 1
+  shuffle: False
+  num_workers: 8
+
+  annot_flag: True
+dataset:
+  dataset_type: 'imgs'
+  save_dataset: True
+sensor:
+  mesh_name: adigit.STL
+
+  T_cam_offset: [[2.22e-16, 2.22e-16, -1.00e+00, 0.00e+00],
+                [-1.00e+00, 0.00e+00, -2.22e-16, 0.00e+00],
+                [0.00e+00, 1.00e+00, 2.22e-16, 1.50e-02],
+                [0.00e+00, 0.00e+00, 0.00e+00, 1.00e+00]]
+
+  P:  [[2.30940108e+00, 0.00000000e+00, 0.00000000e+00, 0.00000000e+00],
+       [0.00000000e+00, 1.73205081e+00, 0.00000000e+00, 0.00000000e+00],
+       [0.00000000e+00, 0.00000000e+00, -1.04081633e+00, -2.04081633e-03],
+       [0.00000000e+00, 0.00000000e+00, -1.00000000e+00, 0.00000000e+00]]
+
+  z_near: 0.001
+  z_far: 0.05
+
+  gel_width: 0.0184
+  gel_height: 0.0250

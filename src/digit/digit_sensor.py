@@ -1,6 +1,9 @@
-from digit_interface import Digit
 import time
+
+from digit_interface import Digit
 from digit_interface.digit import DigitDefaults
+
+
 class DigitSensor():
     def __init__(self,fps: int,resolution: str,serial_num: str):
         self.fps=fps

@@ -23,11 +23,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 """
 
+import copy
 import math
+
 import numpy
 import scipy
 import scipy.fftpack
-import copy
+
 
 def poisson_reconstruct(grady, gradx, boundarysrc):
 	# Thanks to Dr. Ramesh Raskar for providing the original matlab code from which this is derived

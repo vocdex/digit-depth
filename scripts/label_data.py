@@ -1,7 +1,7 @@
 """
 Labels images for training MLP depth reconstruction model.
 Specify the image folder containing the circle images and csv folder to store the labels ( img_names, center_x, center_y, radius ).
-The image dataset should include the rolling of a sphere with a known radius.
+The image datasets should include the rolling of a sphere with a known radius.
 
 Directions:
 -- Click left mouse button to select the center of the sphere.
@@ -9,11 +9,12 @@ Directions:
 -- Double click ESC to move to the next image.
 """
 
-import cv2
-import math
+import argparse
 import csv
 import glob
-import argparse
+import math
+
+import cv2
 
 
 def click_and_store(event,x,y,flags,param):
@@ -45,7 +46,7 @@ def click_and_store(event,x,y,flags,param):
 
 if __name__ == '__main__':
     argparser=argparse.ArgumentParser()
-    argparser.add_argument('--folder',type=str,default='qt_images',help='folder containing images')
+    argparser.add_argument('--folder',type=str,default='images',help='folder containing images')
     argparser.add_argument('--csv',type=str,default='csv/annotate.csv',help='csv file to store results')
     args=argparser.parse_args()
     filename=args.csv

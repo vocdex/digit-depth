@@ -11,3 +11,6 @@ __pycache__/
 *.csv
 *.pth
 *.jpg
+ ../build/
+ ../images/
+ outputs/

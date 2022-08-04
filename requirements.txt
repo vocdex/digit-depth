@@ -19,3 +19,5 @@ scipy~=1.9.0
 open3d~=0.15.2
 matplotlib~=3.5.2
 attrdict~=2.0.1
+hydra~=2.5
+imageio~=2.21.0
