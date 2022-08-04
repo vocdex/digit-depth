@@ -15,7 +15,7 @@ from src.dataio.data_loader import data_loader
 from src.dataio.create_csv import create_normal_csv, create_color_csv
 
 
-@hydra.main(config_path="/home/shuk/digit-depth/config", config_name="rgb_to_normal.yaml",version_base=None)
+@hydra.main(config_path="/Users/shuk/PycharmProjects/digit-depth/config", config_name="rgb_to_normal.yaml",version_base=None)
 def main(cfg):
     train_dataloader, train_dataset = data_loader(dir_dataset=os.path.join(cfg.base_path, "images"),
                                                   params=cfg.dataloader)

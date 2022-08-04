@@ -13,7 +13,7 @@ def data_loader(dir_dataset, params):
            params: a dict of parameters
     """
     transform = transforms.Compose([transforms.ToTensor()])
-    dataset = DigitRealImageAnnotDataset(dir_dataset=dir_dataset,
+    dataset = DigitRealImageAnnotDataset(dir_dataset=dir_dataset,annot_file=params.annot_file,
                                          transform=transform, annot_flag=params.annot_flag)
     dataloader = DataLoader(dataset, batch_size=params.batch_size,
                             shuffle=params.shuffle, num_workers=params.num_workers)

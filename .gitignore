@@ -14,3 +14,6 @@ __pycache__/
  ../build/
  ../images/
  ../outputs/
+ build/
+ datasets/
+ scripts/outputs

@@ -10,7 +10,6 @@ pyudev==0.23.2
 setuptools==61.2.0
 six==1.16.0
 wheel==0.37.1
-
 torch~=1.12.0
 pandas~=1.4.3
 pillow~=9.2.0
