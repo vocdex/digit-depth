@@ -13,5 +13,15 @@ This project is set up in a way that makes it easier to create your own ROS pack
 - Add a Pix2Pix model to generate depth maps from RGB images.
 - Add an LSTM model for predicting slip from collected video frames.
 - Add a baseline ResNet based model for estimating total normal force magnitude.
+## Usage
+Change base_path, gel height,gel width, mm_to_pix values in rgb_to_normal.yaml file in config folder.
+- pip install .
+- While you are at scripts folder, run the following scripts in order:
+    - `python record.py`
+    - `python label_data.py`
+    - `python create_image_dataset.py`
+    - `python train_mlp.py`
 
+color2normal model will be saved to a separate folder "models" in the same directory as this file.
+  
 ### Feel free to post an issue and create PRs.
