@@ -16,6 +16,9 @@ dataset:
 sensor:
   mesh_name: adigit.STL
 
+base_path: "/home/shuk/digit-depth"
+mm_to_pixel: 21.09
+
   T_cam_offset: [[2.22e-16, 2.22e-16, -1.00e+00, 0.00e+00],
                 [-1.00e+00, 0.00e+00, -2.22e-16, 0.00e+00],
                 [0.00e+00, 1.00e+00, 2.22e-16, 1.50e-02],

@@ -13,19 +13,18 @@ from src.third_party import data_utils
 from src.dataio.generate_sphere_gt_normals import generate_sphere_gt_normals
 from src.dataio.data_loader import data_loader
 from src.dataio.create_csv import create_normal_csv, create_color_csv
-BASE_PATH = "/home/shuk/digit-depth"
 
 
 @hydra.main(config_path="/home/shuk/digit-depth/config", config_name="rgb_to_normal.yaml",version_base=None)
 def main(cfg):
-    train_dataloader, train_dataset = data_loader(dir_dataset=os.path.join(BASE_PATH, "images"), params=cfg.dataloader)
-    dirs = [f"{BASE_PATH}/datasets/A/imgs", f"{BASE_PATH}/datasets/B/imgs",
-            f"{BASE_PATH}/datasets/A/csv", f"{BASE_PATH}/datasets/B/csv"]
+    train_dataloader, train_dataset = data_loader(dir_dataset=os.path.join(cfg.base_path, "images"),
+                                                  params=cfg.dataloader)
+    dirs = [f"{cfg.base_path}/datasets/A/imgs", f"{cfg.base_path}/datasets/B/imgs",
+            f"{cfg.base_path}/datasets/A/csv", f"{cfg.base_path}/datasets/B/csv"]
     for dir in dirs: os.makedirs(f"{dir}", exist_ok=True)
     # iterate over images
     img_idx = 0
-    mm_to_pixel = 21.09
-    radius_bearing = np.int32(0.5 * 6.0 * mm_to_pixel)
+    radius_bearing = np.int32(0.5 * 6.0 * cfg.mm_to_pixel)
     while img_idx < len(train_dataset):
         # read img + annotations
         data = train_dataset[img_idx]
