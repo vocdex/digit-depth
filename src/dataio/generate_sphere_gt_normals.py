@@ -1,8 +1,9 @@
 """
   Script for generating sphere ground truth normal images.
 """
-import numpy as np
 import math
+
+import numpy as np
 
 
 def generate_sphere_gt_normals(img_mask, center_x, center_y, radius):

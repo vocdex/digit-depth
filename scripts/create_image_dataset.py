@@ -3,16 +3,17 @@ Creates color+normal datasets based on annotation file.
 The datasets can be used to train MLP, CycleGAN, Pix2Pix models.
 """
 import os
+
 import cv2
 import hydra
 import imageio
 import numpy as np
 import torch
 
-from src.third_party import data_utils
-from src.dataio.generate_sphere_gt_normals import generate_sphere_gt_normals
+from src.dataio.create_csv import create_color_csv, create_normal_csv
 from src.dataio.data_loader import data_loader
-from src.dataio.create_csv import create_normal_csv, create_color_csv
+from src.dataio.generate_sphere_gt_normals import generate_sphere_gt_normals
+from src.third_party import data_utils
 
 
 @hydra.main(config_path="/Users/shuk/PycharmProjects/digit-depth/config", config_name="rgb_to_normal.yaml",version_base=None)

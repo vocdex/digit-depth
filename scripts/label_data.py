@@ -14,9 +14,10 @@ import csv
 import glob
 import math
 import os
+
 import cv2
 
-BASE_PATH = "/home/shuk/digit-depth/"
+BASE_PATH = "/Users/shuk/PycharmProjects/digit-depth/"
 
 
 def click_and_store(event,x,y,flags,param):

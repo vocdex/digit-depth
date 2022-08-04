@@ -1,9 +1,10 @@
 """
   Data loader for the color-normal datasets
 """
-from src.dataio.digit_dataset import DigitRealImageAnnotDataset
 import torchvision.transforms as transforms
 from torch.utils.data import DataLoader
+
+from src.dataio.digit_dataset import DigitRealImageAnnotDataset
 
 
 def data_loader(dir_dataset, params):
