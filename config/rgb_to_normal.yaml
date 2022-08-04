@@ -9,7 +9,6 @@ dataloader:
   batch_size: 1
   shuffle: False
   num_workers: 8
-
   annot_flag: True
 dataset:
   dataset_type: 'imgs'

@@ -3,12 +3,13 @@
 """
 from src.dataio.digit_dataset import DigitRealImageAnnotDataset
 import torchvision.transforms as transforms
-from torch.utils.data import  DataLoader
+from torch.utils.data import DataLoader
 
 
-def data_loader(dir_dataset,params):
+def data_loader(dir_dataset, params):
     """A data loader for the color-normal datasets
        Args:
+           dir_dataset: path to the dataset
            params: a dict of parameters
     """
     transform = transforms.Compose([transforms.ToTensor()])

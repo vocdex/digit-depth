@@ -13,8 +13,10 @@ import argparse
 import csv
 import glob
 import math
-
+import os
 import cv2
+
+BASE_PATH = "/home/shuk/digit-depth/"
 
 
 def click_and_store(event,x,y,flags,param):
@@ -47,10 +49,11 @@ def click_and_store(event,x,y,flags,param):
 if __name__ == '__main__':
     argparser=argparse.ArgumentParser()
     argparser.add_argument('--folder',type=str,default='images',help='folder containing images')
-    argparser.add_argument('--csv',type=str,default='csv/annotate.csv',help='csv file to store results')
+    argparser.add_argument('--csv',type=str,default=f'{BASE_PATH}csv/annotate.csv',help='csv file to store results')
     args=argparser.parse_args()
     filename=args.csv
-    img_files=sorted(glob.glob(f'{args.folder}/*.png'))
+    img_folder=os.path.join(BASE_PATH,args.folder)
+    img_files=sorted(glob.glob(f'{img_folder}/*.png'))
 
     center_x, center_y, circumference_x, circumference_y, radii = [], [], [], [], []
     count = 0
