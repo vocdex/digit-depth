@@ -1,25 +1,28 @@
 import argparse
 import os
+
 import torch
 import torch.nn as nn
 import wandb
 from torch.utils.data import DataLoader
 from tqdm import tqdm
+
 from src.train import MLP, Color2NormalDataset
+
 seed = 42
 torch.seed = seed
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 base_path = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 
 
-def train(train_loader,epochs):
+def train(train_loader, epochs, lr):
     model = MLP().to(device)
-    # wandb.init(project="MLP", name="Color 2 Normal model train")
-    # wandb.watch(model, log_freq=100)
+    wandb.init(project="MLP", name="Color 2 Normal model train")
+    wandb.watch(model, log_freq=100)
 
     model.train()
 
-    learning_rate = 0.001
+    learning_rate = lr
     # Loss and optimizer
     criterion = nn.MSELoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
@@ -60,8 +63,8 @@ def test(test_loader,criterion):
         f"{base_path}/models/mlp.ckpt").to(
         device)
     model.eval()
-    # wandb.init(project="MLP", name="Color 2 Normal model test")
-    # wandb.watch(model, log_freq=100)
+    wandb.init(project="MLP", name="Color 2 Normal model test")
+    wandb.watch(model, log_freq=100)
     model.eval()
     avg_loss = 0.0
     cnt = 0
@@ -96,7 +99,7 @@ def main():
             option.train_path)
         train_loader = DataLoader(train_set, batch_size=option.batch_size, shuffle=True)
         print("Training set size: ", len(train_set))
-        train(train_loader, option.epochs)
+        train(train_loader, option.epochs,option.learning_rate)
     elif option.mode == "test":
         test_set = Color2NormalDataset(
             option.test_path)

@@ -5,9 +5,10 @@ import copy
 import numpy as np
 import open3d as o3d
 import torch
-import vis_utils as vis_utils
-from poisson import poisson_reconstruct
 from scipy import ndimage
+
+from .poisson import poisson_reconstruct
+from .vis_utils import visualize_inlier_outlier
 
 """
 Common functions
@@ -507,7 +508,7 @@ def remove_outlier_pts(points3d, nb_neighbors=20, std_ratio=10.0, vis=False):
     )
 
     if vis:
-        vis_utils.visualize_inlier_outlier(cloud, ind_filt)
+        visualize_inlier_outlier(cloud, ind_filt)
 
     points3d_filt = np.asarray(cloud_filt.points).transpose()
     points3d_filt = (

@@ -10,7 +10,7 @@ dataloader:
   shuffle: False
   num_workers: 8
   annot_flag: True
-  annot_file: "/home/shuk/digit-depth/csv/annotate.csv"
+  annot_file: "/Users/shuk/PycharmProjects/digit-depth/csv/annotate.csv"
 dataset:
   dataset_type: 'imgs'
   save_dataset: True

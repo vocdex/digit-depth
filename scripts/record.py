@@ -6,8 +6,11 @@ Script for capturing individual frames while the camera output is displayed.
 import argparse
 import os
 import os.path
+
 import cv2
+
 from src.digit.digit_sensor import DigitSensor
+
 base_path = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 
 

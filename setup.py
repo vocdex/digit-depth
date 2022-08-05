@@ -8,6 +8,6 @@ setup(
     author="Shukrullo Nazirjonov",
     author_email="nazirjonovsh2000@gmail.com",
     license="MIT",
-    packages=["src/digit", "src/third_party", "src/train", "src"],
+    packages=["src/digit", "src/third_party", "src/train", "src","scripts"],
     zip_safe=False,
 )

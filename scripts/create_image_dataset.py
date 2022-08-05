@@ -73,12 +73,10 @@ def main(cfg):
 
         # 2. downsample and convert to NumPy: (320,240,3) -> (160,120,3)
         img_normal_np = data_utils.interpolate_img(
-            img=torch.tensor(img_normal_np).permute(2, 0, 1), rows=160, cols=120
-        )
+            img=torch.tensor(img_normal_np).permute(2, 0, 1), rows=160, cols=120)
         img_normal_np = img_normal_np.permute(1, 2, 0).cpu().detach().numpy()
         img_color_ds = data_utils.interpolate_img(
-            img=torch.tensor(img_color_np).permute(2, 0, 1), rows=160, cols=120
-        )
+            img=torch.tensor(img_color_np).permute(2, 0, 1), rows=160, cols=120)
         img_color_np = img_color_ds.permute(1, 2, 0).cpu().detach().numpy()
 
         # 3. save csv files for color and normal images

@@ -11,8 +11,8 @@ def generate_sphere_gt_normals(img_mask, center_x, center_y, radius):
     Generates sphere ground truth normal images for an image.
     Args:
       img_mask: a numpy array of shape [H, W, 3]
-      center_x: the x coordinate of the center of the sphere
-      center_y: the y coordinate of the center of the sphere
+      center_x: x coordinate of the center of the sphere
+      center_y: y coordinate of the center of the sphere
       radius: the radius of the sphere
     Returns:
       img_normal: a numpy array of shape [H, W, 3]
