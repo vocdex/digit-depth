@@ -10,14 +10,14 @@ dataloader:
   shuffle: False
   num_workers: 8
   annot_flag: True
-  annot_file: "/Users/shuk/PycharmProjects/digit-depth/csv/annotate.csv"
+  annot_file: "/home/shuk/digit-depth/csv/annotate.csv"
 dataset:
   dataset_type: 'imgs'
   save_dataset: True
 sensor:
   mesh_name: adigit.STL
 
-base_path: "/Users/shuk/PycharmProjects/digit-depth"
+base_path: "/home/shuk/digit-depth"
 mm_to_pixel: 21.09
 
 T_cam_offset: [[2.22e-16, 2.22e-16, -1.00e+00, 0.00e+00],

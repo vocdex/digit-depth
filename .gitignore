@@ -17,3 +17,7 @@ __pycache__/
  build/
  datasets/
  scripts/outputs
+build/
+images/
+datasets/
+scripts/outputs/

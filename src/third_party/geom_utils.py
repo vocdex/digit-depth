@@ -27,11 +27,14 @@ def max_clip(x, max_val):
 
 
 def normalize(x, min_val, max_val):
-    return (x - torch.min(x)) * (max_val - min_val) / (torch.max(x) - torch.min(x)) + min_val
+    return (x - torch.min(x)) * (max_val - min_val) / (
+        torch.max(x) - torch.min(x)
+    ) + min_val
 
 
-def mask_background(x, bg_mask, bg_val=0.):
-    if bg_mask is not None: x[bg_mask] = bg_val
+def mask_background(x, bg_mask, bg_val=0.0):
+    if bg_mask is not None:
+        x[bg_mask] = bg_val
 
     return x
 
@@ -63,15 +66,19 @@ def Rt_to_T(R=None, t=None, device=None):
 
     T = torch.eye(4, device=device)
 
-    if ((len(R.shape) > 2) & (len(t.shape) > 1)):  # batch version
+    if (len(R.shape) > 2) & (len(t.shape) > 1):  # batch version
         B = R.shape[0]
         T = T.repeat(B, 1, 1)
-        if R is not None: T[:, 0:3, 0:3] = R
-        if t is not None: T[:, 0:3, -1] = t
+        if R is not None:
+            T[:, 0:3, 0:3] = R
+        if t is not None:
+            T[:, 0:3, -1] = t
 
     else:
-        if R is not None: T[0:3, 0:3] = R
-        if t is not None: T[0:3, -1] = t
+        if R is not None:
+            T[0:3, 0:3] = R
+        if t is not None:
+            T[0:3, -1] = t
 
     return T
 
@@ -85,9 +92,12 @@ def transform_pts3d(T, pts):
     """
     D, N = pts.shape
 
-    if (D == 3):
-        pts_tf = torch.cat((pts, torch.ones(1, N)), dim=0) if torch.is_tensor(pts) else np.concatenate(
-            (pts, torch.ones(1, N)), axis=0)
+    if D == 3:
+        pts_tf = (
+            torch.cat((pts, torch.ones(1, N)), dim=0)
+            if torch.is_tensor(pts)
+            else np.concatenate((pts, torch.ones(1, N)), axis=0)
+        )
 
     pts_tf = torch.matmul(T, pts_tf) if torch.is_tensor(pts) else np.matmul(T, pts_tf)
     pts_tf = pts_tf[0:3, :]
@@ -152,7 +162,7 @@ def _pixel_to_clip(pix_pos, depth_map, params):
     w_c = -z_eye
     x_c = x_ndc * w_c
     y_c = y_ndc * w_c
-    z_c = -(f + n) / (f - n) * z_eye - 2 * f * n / (f - n) * 1.
+    z_c = -(f + n) / (f - n) * z_eye - 2 * f * n / (f - n) * 1.0
 
     clip_pos = torch.stack([x_c, y_c, z_c, w_c], dim=0)
 
@@ -212,9 +222,9 @@ def depth_to_pts3d(depth, P, V, params=None, ordered_pts=False):
     :return: world_pos position in 3d world coordinates, (3, H, W) or (3, N)
     """
 
-    assert (2 <= len(depth.shape) <= 3)
-    assert (P.shape == (4, 4))
-    assert (V.shape == (4, 4))
+    assert 2 <= len(depth.shape) <= 3
+    assert P.shape == (4, 4)
+    assert V.shape == (4, 4)
 
     depth_map = depth.squeeze(0) if (len(depth.shape) == 3) else depth
     H, W = depth_map.shape
@@ -257,8 +267,8 @@ def analytic_flow(img1, depth1, P, V1, V2, M1, M2, gel_depth, params):
     flow_map = pixel_flow.reshape(pixel_flow.shape[0], H, W)
 
     # mask out background gel pixels
-    mask_idxs = (depth_map >= gel_depth)
-    flow_map[:, mask_idxs] = 0.
+    mask_idxs = depth_map >= gel_depth
+    flow_map[:, mask_idxs] = 0.0
 
     return flow_map
 
@@ -270,15 +280,15 @@ Normal to depth conversion / integration functions
 
 def _preproc_depth(img_depth, bg_mask=None):
     if bg_mask is not None:
-        img_depth = mask_background(img_depth, bg_mask=bg_mask, bg_val=0.)
+        img_depth = mask_background(img_depth, bg_mask=bg_mask, bg_val=0.0)
 
     return img_depth
 
 
 def _preproc_normal(img_normal, bg_mask=None):
-    '''
+    """
     img_normal: lies in range [0, 1]
-    '''
+    """
 
     # 0.5 corresponds to 0
     img_normal = img_normal - 0.5
@@ -288,27 +298,27 @@ def _preproc_normal(img_normal, bg_mask=None):
 
     # set background to have only z normals (flat, facing camera)
     if bg_mask is not None:
-        img_normal[0:2, bg_mask] = 0.
+        img_normal[0:2, bg_mask] = 0.0
         img_normal[2, bg_mask] = 1.0
 
     return img_normal
 
 
 def _depth_to_grad_depth(img_depth, bg_mask=None):
-    gradx = ndimage.sobel(img_depth.cpu().detach().numpy(), axis=1, mode='constant')
-    grady = ndimage.sobel(img_depth.cpu().detach().numpy(), axis=0, mode='constant')
+    gradx = ndimage.sobel(img_depth.cpu().detach().numpy(), axis=1, mode="constant")
+    grady = ndimage.sobel(img_depth.cpu().detach().numpy(), axis=0, mode="constant")
 
     gradx = torch.FloatTensor(gradx, device=img_depth.device)
     grady = torch.FloatTensor(grady, device=img_depth.device)
 
     if bg_mask is not None:
-        gradx = mask_background(gradx, bg_mask=bg_mask, bg_val=0.)
-        grady = mask_background(grady, bg_mask=bg_mask, bg_val=0.)
+        gradx = mask_background(gradx, bg_mask=bg_mask, bg_val=0.0)
+        grady = mask_background(grady, bg_mask=bg_mask, bg_val=0.0)
 
     return gradx, grady
 
 
-def _normal_to_grad_depth(img_normal, gel_width=1., gel_height=1., bg_mask=None):
+def _normal_to_grad_depth(img_normal, gel_width=1.0, gel_height=1.0, bg_mask=None):
     # Ref: https://stackoverflow.com/questions/34644101/calculate-surface-normals-from-depth-image-using-neighboring-pixels-cross-produc/34644939#34644939
 
     EPS = 1e-1
@@ -336,8 +346,8 @@ def _normal_to_grad_depth(img_normal, gel_width=1., gel_height=1., bg_mask=None)
     grady = grady * (gel_height / H)
 
     if bg_mask is not None:
-        gradx = mask_background(gradx, bg_mask=bg_mask, bg_val=0.)
-        grady = mask_background(grady, bg_mask=bg_mask, bg_val=0.)
+        gradx = mask_background(gradx, bg_mask=bg_mask, bg_val=0.0)
+        grady = mask_background(grady, bg_mask=bg_mask, bg_val=0.0)
 
     return gradx, grady
 
@@ -346,11 +356,16 @@ def _integrate_grad_depth(gradx, grady, boundary=None, bg_mask=None, max_depth=0
     if boundary is None:
         boundary = torch.zeros((gradx.shape[0], gradx.shape[1]))
 
-    img_depth_recon = poisson_reconstruct(grady.cpu().detach(
-    ).numpy(), gradx.cpu().detach().numpy(), boundary.cpu().detach().numpy())
-    print("before",type(img_depth_recon))
-    print("gradx.device:",gradx.device)
-    img_depth_recon = torch.tensor(img_depth_recon, device=gradx.device,dtype=torch.float32)
+    img_depth_recon = poisson_reconstruct(
+        grady.cpu().detach().numpy(),
+        gradx.cpu().detach().numpy(),
+        boundary.cpu().detach().numpy(),
+    )
+    print("before", type(img_depth_recon))
+    print("gradx.device:", gradx.device)
+    img_depth_recon = torch.tensor(
+        img_depth_recon, device=gradx.device, dtype=torch.float32
+    )
     print(type(img_depth_recon))
 
     if bg_mask is not None:
@@ -358,7 +373,7 @@ def _integrate_grad_depth(gradx, grady, boundary=None, bg_mask=None, max_depth=0
 
     # after integration, img_depth_recon lies between 0. (bdry) and a -ve val (obj depth)
     # rescale to make max depth as gel depth and obj depth as +ve values
-    img_depth_recon = max_clip(img_depth_recon, max_val=torch.tensor(0.)) + max_depth
+    img_depth_recon = max_clip(img_depth_recon, max_val=torch.tensor(0.0)) + max_depth
 
     return img_depth_recon
 
@@ -371,21 +386,36 @@ def depth_to_depth(img_depth, bg_mask=None, boundary=None, params=None):
     gradx, grady = _depth_to_grad_depth(img_depth=img_depth.squeeze(), bg_mask=bg_mask)
 
     # integrate grad depth
-    img_depth_recon = _integrate_grad_depth(gradx, grady, boundary=boundary, bg_mask=bg_mask)
+    img_depth_recon = _integrate_grad_depth(
+        gradx, grady, boundary=boundary, bg_mask=bg_mask
+    )
 
     return img_depth_recon
 
 
-def normal_to_depth(img_normal, bg_mask=None, boundary=None, gel_width=0.02, gel_height=0.03, max_depth=0.02):
+def normal_to_depth(
+    img_normal,
+    bg_mask=None,
+    boundary=None,
+    gel_width=0.02,
+    gel_height=0.03,
+    max_depth=0.02,
+):
     # preproc normal img
     img_normal = _preproc_normal(img_normal=img_normal, bg_mask=bg_mask)
 
     # get grad depth
-    gradx, grady = _normal_to_grad_depth(img_normal=img_normal, gel_width=gel_width,
-                                         gel_height=gel_height, bg_mask=bg_mask)
+    gradx, grady = _normal_to_grad_depth(
+        img_normal=img_normal,
+        gel_width=gel_width,
+        gel_height=gel_height,
+        bg_mask=bg_mask,
+    )
 
     # integrate grad depth
-    img_depth_recon = _integrate_grad_depth(gradx, grady, boundary=boundary, bg_mask=bg_mask, max_depth=max_depth)
+    img_depth_recon = _integrate_grad_depth(
+        gradx, grady, boundary=boundary, bg_mask=bg_mask, max_depth=max_depth
+    )
 
     return img_depth_recon
 
@@ -398,16 +428,22 @@ def normal_to_depth(img_normal, bg_mask=None, boundary=None, gel_width=0.02, gel
 def _fpfh(pcd, normals):
     pcd.normals = o3d.utility.Vector3dVector(normals)
     pcd_fpfh = o3d.pipelines.registration.compute_fpfh_feature(
-        pcd, o3d.geometry.KDTreeSearchParamHybrid(radius=0.3, max_nn=64))
+        pcd, o3d.geometry.KDTreeSearchParamHybrid(radius=0.3, max_nn=64)
+    )
     return pcd_fpfh
 
 
 def _fast_global_registration(source, target, source_fpfh, target_fpfh):
     distance_threshold = 0.01
     result = o3d.pipelines.registration.registration_fast_based_on_feature_matching(
-        source, target, source_fpfh, target_fpfh,
+        source,
+        target,
+        source_fpfh,
+        target_fpfh,
         o3d.pipelines.registration.FastGlobalRegistrationOption(
-            maximum_correspondence_distance=distance_threshold))
+            maximum_correspondence_distance=distance_threshold
+        ),
+    )
 
     transformation = result.transformation
     metrics = [result.fitness, result.inlier_rmse, result.correspondence_set]
@@ -418,26 +454,35 @@ def _fast_global_registration(source, target, source_fpfh, target_fpfh):
 def fgr(source, target, src_normals, tgt_normals):
     source_fpfh = _fpfh(source, src_normals)
     target_fpfh = _fpfh(target, tgt_normals)
-    transformation, metrics = _fast_global_registration(source=source,
-                                                        target=target,
-                                                        source_fpfh=source_fpfh,
-                                                        target_fpfh=target_fpfh)
+    transformation, metrics = _fast_global_registration(
+        source=source, target=target, source_fpfh=source_fpfh, target_fpfh=target_fpfh
+    )
     return transformation, metrics
 
 
-def icp(source, target, T_init=np.eye(4), mcd=0.1, max_iter=50, type='point_to_plane'):
-    if (type == 'point_to_point'):
-        result = o3d.pipelines.registration.registration_icp(source=source, target=target,
-                                                             max_correspondence_distance=mcd, init=T_init,
-                                                             estimation_method=o3d.pipelines.registration.TransformationEstimationPointToPoint(),
-                                                             criteria=o3d.pipelines.registration.ICPConvergenceCriteria(
-                                                                 max_iteration=max_iter))
+def icp(source, target, T_init=np.eye(4), mcd=0.1, max_iter=50, type="point_to_plane"):
+    if type == "point_to_point":
+        result = o3d.pipelines.registration.registration_icp(
+            source=source,
+            target=target,
+            max_correspondence_distance=mcd,
+            init=T_init,
+            estimation_method=o3d.pipelines.registration.TransformationEstimationPointToPoint(),
+            criteria=o3d.pipelines.registration.ICPConvergenceCriteria(
+                max_iteration=max_iter
+            ),
+        )
     else:
-        result = o3d.pipelines.registration.registration_icp(source=source, target=target,
-                                                             max_correspondence_distance=mcd, init=T_init,
-                                                             estimation_method=o3d.pipelines.registration.TransformationEstimationPointToPlane(),
-                                                             criteria=o3d.pipelines.registration.ICPConvergenceCriteria(
-                                                                 max_iteration=max_iter))
+        result = o3d.pipelines.registration.registration_icp(
+            source=source,
+            target=target,
+            max_correspondence_distance=mcd,
+            init=T_init,
+            estimation_method=o3d.pipelines.registration.TransformationEstimationPointToPlane(),
+            criteria=o3d.pipelines.registration.ICPConvergenceCriteria(
+                max_iteration=max_iter
+            ),
+        )
 
     transformation = result.transformation
     metrics = [result.fitness, result.inlier_rmse, result.correspondence_set]
@@ -450,25 +495,39 @@ Open3D helper functions
 """
 
 
-def remove_outlier_pts(points3d, nb_neighbors=20, std_ratio=10., vis=False):
-    points3d_np = points3d.cpu().detach().numpy() if torch.is_tensor(points3d) else points3d
+def remove_outlier_pts(points3d, nb_neighbors=20, std_ratio=10.0, vis=False):
+    points3d_np = (
+        points3d.cpu().detach().numpy() if torch.is_tensor(points3d) else points3d
+    )
 
     cloud = o3d.geometry.PointCloud()
     cloud.points = copy.deepcopy(o3d.utility.Vector3dVector(points3d_np.transpose()))
-    cloud_filt, ind_filt = cloud.remove_statistical_outlier(nb_neighbors=nb_neighbors, std_ratio=std_ratio)
+    cloud_filt, ind_filt = cloud.remove_statistical_outlier(
+        nb_neighbors=nb_neighbors, std_ratio=std_ratio
+    )
 
-    if vis: vis_utils.visualize_inlier_outlier(cloud, ind_filt)
+    if vis:
+        vis_utils.visualize_inlier_outlier(cloud, ind_filt)
 
     points3d_filt = np.asarray(cloud_filt.points).transpose()
-    points3d_filt = torch.tensor(points3d_filt) if torch.is_tensor(points3d) else points3d_filt
+    points3d_filt = (
+        torch.tensor(points3d_filt) if torch.is_tensor(points3d) else points3d_filt
+    )
 
     return points3d_filt
 
 
 def init_points_to_clouds(clouds, points3d, colors=None):
     for idx, cloud in enumerate(clouds):
-        points3d_np = points3d[idx].cpu().detach().numpy() if torch.is_tensor(points3d[idx]) else points3d[idx]
-        cloud.points = copy.deepcopy(o3d.utility.Vector3dVector(points3d_np.transpose()))
-        if colors is not None: cloud.paint_uniform_color(colors[idx])
+        points3d_np = (
+            points3d[idx].cpu().detach().numpy()
+            if torch.is_tensor(points3d[idx])
+            else points3d[idx]
+        )
+        cloud.points = copy.deepcopy(
+            o3d.utility.Vector3dVector(points3d_np.transpose())
+        )
+        if colors is not None:
+            cloud.paint_uniform_color(colors[idx])
 
     return clouds
