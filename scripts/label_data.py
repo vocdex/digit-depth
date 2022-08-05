@@ -14,13 +14,12 @@ import csv
 import glob
 import math
 import os
-
 import cv2
 
-BASE_PATH = "/home/shuk/digit-depth"
+base_path = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 
 
-def click_and_store(event, x, y):
+def click_and_store(event, x, y, flags, param):
     global count
     global center_x, center_y, circumference_x, circumference_y, radii
     if event == cv2.EVENT_LBUTTONDOWN:
@@ -52,12 +51,12 @@ def click_and_store(event, x, y):
 if __name__ == "__main__":
     argparser = argparse.ArgumentParser()
     argparser.add_argument("--folder", type=str, default="images", help="folder containing images")
-    argparser.add_argument("--csv", type=str, default=f"{BASE_PATH}csv/annotate.csv", help="csv file to store results")
+    argparser.add_argument("--csv", type=str, default=f"{base_path}/csv/annotate.csv", help="csv file to store results")
     args = argparser.parse_args()
     filename = args.csv
-    img_folder = os.path.join(BASE_PATH, args.folder)
+    img_folder = os.path.join(base_path, args.folder)
     img_files = sorted(glob.glob(f"{img_folder}/*.png"))
-
+    os.makedirs(os.path.join(base_path, "csv"), exist_ok=True)
     center_x, center_y, circumference_x, circumference_y, radii = [], [], [], [], []
     count = 0
     for img in img_files:

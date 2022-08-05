@@ -16,18 +16,20 @@ from src.dataio.data_loader import data_loader
 from src.dataio.generate_sphere_gt_normals import generate_sphere_gt_normals
 from src.third_party import data_utils
 
+base_path = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+
 
 @hydra.main(config_path="/home/shuk/digit-depth/config", config_name="rgb_to_normal.yaml", version_base=None)
 def main(cfg):
-    train_dataloader, train_dataset = data_loader(
-        dir_dataset=os.path.join(cfg.base_path, "images"), params=cfg.dataloader
+    normal_dataloader, normal_dataset = data_loader(
+        dir_dataset=os.path.join(base_path, "images"), params=cfg.dataloader
     )
     dirs = [
-        f"{cfg.base_path}/datasets/A/imgs",
-        f"{cfg.base_path}/datasets/B/imgs",
-        f"{cfg.base_path}/datasets/A/csv",
-        f"{cfg.base_path}/datasets/B/csv",
-        f"{cfg.base_path}/datasets/train_test_split",
+        f"{base_path}/datasets/A/imgs",
+        f"{base_path}/datasets/B/imgs",
+        f"{base_path}/datasets/A/csv",
+        f"{base_path}/datasets/B/csv",
+        f"{base_path}/datasets/train_test_split",
     ]
     for dir in dirs:
         print(f"Creating directory: {dir}")
@@ -35,9 +37,9 @@ def main(cfg):
     # iterate over images
     img_idx = 0
     radius_bearing = np.int32(0.5 * 6.0 * cfg.mm_to_pixel)
-    while img_idx < len(train_dataset):
+    while img_idx < len(normal_dataset):
         # read img + annotations
-        data = train_dataset[img_idx]
+        data = normal_dataset[img_idx]
         if cfg.dataloader.annot_flag:
             img, annot = data
             if annot.shape[0] == 0:
