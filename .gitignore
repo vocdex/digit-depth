@@ -21,3 +21,6 @@ build/
 images/
 datasets/
 scripts/outputs/
+models/
+scripts/~/
+~/

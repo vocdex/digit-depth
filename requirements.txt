@@ -20,3 +20,6 @@ matplotlib~=3.5.2
 attrdict~=2.0.1
 hydra~=2.5
 imageio~=2.21.0
+scikit-learn~=1.1.1
+wandb~=0.13.0
+tqdm~=4.64.0

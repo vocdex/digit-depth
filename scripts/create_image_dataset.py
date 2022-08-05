@@ -10,7 +10,8 @@ import imageio
 import numpy as np
 import torch
 
-from src.dataio.create_csv import create_pixel_csv, combine_csv, create_train_test_csv
+from src.dataio.create_csv import (combine_csv, create_pixel_csv,
+                                   create_train_test_csv)
 from src.dataio.data_loader import data_loader
 from src.dataio.generate_sphere_gt_normals import generate_sphere_gt_normals
 from src.third_party import data_utils
