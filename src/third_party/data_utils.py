@@ -12,6 +12,7 @@ def pandas_col_to_numpy(df_col):
     df_col = np.stack(df_col)
     return df_col
 
+
 def pandas_string_to_numpy(arr_str):
     arr_npy = np.fromstring(arr_str.replace("\n", "").replace("[", "").replace("]", "").replace("  ", " "),sep=", ")
     return arr_npy

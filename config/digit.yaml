@@ -8,6 +8,7 @@ visualize:
     compute_type: "cuda"
 sensor:
   mesh_name: adigit.STL
+  serial_num: "D20001"
 
   T_cam_offset: [[2.22e-16, 2.22e-16, -1.00e+00, 0.00e+00],
                 [-1.00e+00, 0.00e+00, -2.22e-16, 0.00e+00],

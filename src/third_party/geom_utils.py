@@ -7,8 +7,8 @@ import open3d as o3d
 import torch
 from scipy import ndimage
 
-from .poisson import poisson_reconstruct
-from .vis_utils import visualize_inlier_outlier
+from src.third_party.poisson import poisson_reconstruct
+from src.third_party.vis_utils import visualize_inlier_outlier
 
 """
 Common functions
