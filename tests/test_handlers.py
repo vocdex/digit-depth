@@ -5,6 +5,7 @@ from src.handlers.image import ImageHandler
 
 
 class Handler(unittest.TestCase):
+    """Test for various data handlers"""
     def test_tensor_to_PIL(self):
         instance=ImageHandler(Image.open("tests/test_handlers.py"), "RGB")
         tensor = torch.randn(1, 3, 224, 224)
