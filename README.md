@@ -25,7 +25,7 @@ Change gel height,gel width, mm_to_pix values in rgb_to_normal.yaml file in conf
     - `python record.py` : Press SPACEBAR to start recording.
     - `python label_data.py` : Press LEFTMOUSE to label center and RIGHTMOUSE to label circumference.
     - `python create_image_dataset.py` : Create a dataset of images and save it to a csv file.
-    - `python train_mlp.py` : Train a MLP model for RGB to Normal mapping.
+    - `python train_mlp.py` : Train an MLP model for RGB to Normal mapping.
 
 color2normal model will be saved to a separate folder "models" in the same directory as this file.
   
