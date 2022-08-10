@@ -1,3 +1,8 @@
+<br />
+<p align="center">
+  <img src="https://github.com/vocdex/vocdex.github.io/blob/master/assets/img/icon.png" width="150" title="hover text">
+</p>
+
 # DIGIT
 This codebase allows you:
 - Collect image frames from DIGIT and annotate circles in each frame.
