@@ -38,7 +38,7 @@ if __name__ == "__main__":
     argparser = argparse.ArgumentParser()
     argparser.add_argument("--fps", type=int, default=30)
     argparser.add_argument("--resolution", type=str, default="QVGA")
-    argparser.add_argument("--serial_num", type=str, default="D20001")
+    argparser.add_argument("--serial_num", type=str, default="D00001")
     args = argparser.parse_args()
     if not os.path.exists(os.path.join(base_path, "images")):
         os.makedirs(os.path.join(base_path, "images"), exist_ok=True)
