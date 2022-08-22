@@ -3,7 +3,7 @@ random_seed: 0
 save_csv: False
 visualize:
   normals: True
-  points3d: False
+  points3d: True
 
 dataloader:
   batch_size: 1
