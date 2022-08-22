@@ -21,10 +21,17 @@ This project is set up in a way that makes it easier to create your own ROS pack
   <img src="https://github.com/vocdex/digit-depth/blob/main/assets/depthPCA.gif" width="400" title="depth">
 </p>
 
+### Depth image point cloud :
+<br />
+<p align="center">
+  <img src="https://github.com/vocdex/digit-depth/blob/main/assets/point-cloud.gif" width="400" title="point-cloud">
+</p>
+
+
 ### Marker movement tracking ( useful for force direction and magnitude estimation):
 <br />
 <p align="center">
-  <img src="https://github.com/vocdex/digit-depth/blob/main/assets/markers.gif" width="400" title="depth">
+  <img src="https://github.com/vocdex/digit-depth/blob/main/assets/markers.gif" width="400" title="marker">
 </p>
 
 ## TODO
