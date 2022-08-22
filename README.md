@@ -48,5 +48,13 @@ Change **gel height,gel width, mm_to_pix, base_img_path, sensor :serial_num ** v
     - `python train_mlp.py` : Train an MLP model for RGB to Normal mapping.
 
 color2normal model will be saved to a separate folder "models" in the same directory as this file.
+
+For ROS, you can use the following command to run the node:
+```bash
+python scripts/ros/depth_value_pub.py
+python scripts/ros/digit_image_pub.py
+```
+depth_value_pub.py publishes the maximum depth (deformation) value for the entire image when object is pressed. Accuracy depends on your MLP-depth model.
+digit_image_pub.py publishes compressed RGB images from DIGIT.
 ### Please star this repo if you like it!
 ### Feel free to post an issue and create PRs.
