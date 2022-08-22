@@ -32,9 +32,9 @@ This project is set up in a way that makes it easier to create your own ROS pack
 - Add an LSTM model for predicting slip from collected video frames.
 - Add a baseline ResNet based model for estimating total normal force magnitude.
 ## Usage
-Change gel height,gel width, mm_to_pix values in rgb_to_normal.yaml file in config folder.
-- pip install .
-- cd scripts
+Change **gel height,gel width, mm_to_pix, base_img_path, sensor :serial_num ** values in rgb_to_normal.yaml file in config folder.
+- `pip install . `
+- `cd scripts`
     - `python record.py` : Press SPACEBAR to start recording.
     - `python label_data.py` : Press LEFTMOUSE to label center and RIGHTMOUSE to label circumference.
     - `python create_image_dataset.py` : Create a dataset of images and save it to a csv file.
