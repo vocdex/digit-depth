@@ -362,12 +362,9 @@ def _integrate_grad_depth(gradx, grady, boundary=None, bg_mask=None, max_depth=0
         gradx.cpu().detach().numpy(),
         boundary.cpu().detach().numpy(),
     )
-    print("before", type(img_depth_recon))
-    print("gradx.device:", gradx.device)
     img_depth_recon = torch.tensor(
         img_depth_recon, device=gradx.device, dtype=torch.float32
     )
-    print(type(img_depth_recon))
 
     if bg_mask is not None:
         img_depth_recon = mask_background(img_depth_recon, bg_mask)

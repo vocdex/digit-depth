@@ -16,7 +16,7 @@ dataset:
   save_dataset: True
 sensor:
   mesh_name: adigit.STL
-  serial_num: "D20001"
+  serial_num: "D00001"
   T_cam_offset: [ [ 2.22e-16, 2.22e-16, -1.00e+00, 0.00e+00 ],
                     [ -1.00e+00, 0.00e+00, -2.22e-16, 0.00e+00 ],
                     [ 0.00e+00, 1.00e+00, 2.22e-16, 1.50e-02 ],
