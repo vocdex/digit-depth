@@ -15,10 +15,11 @@ class DigitSensor:
         digit = self.setup_digit()
         return digit
 
-    def setup_digit(
-        self,
-    ):
-        """Sets up the digit sensor and returns it."""
+    def __str__(self):
+        return f"DigitSensor(fps={self.fps}, resolution={self.resolution}, serial_num={self.serial_num})"
+
+    def setup_digit(self,):
+        "Sets up the digit sensor and returns it."
 
         digit = Digit(self.serial_num)
         digit.connect()
