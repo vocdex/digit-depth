@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
     name="digit-depth",
@@ -8,6 +8,10 @@ setup(
     author="Shukrullo Nazirjonov",
     author_email="nazirjonovsh2000@gmail.com",
     license="MIT",
-    packages=["src/digit", "src/third_party", "src/train", "src","scripts"],
+    install_requires=['numpy', 'opencv-python', 'torch'],
+    packages=find_packages(),
     zip_safe=False,
+    extras_require={
+     'testing': ['pytest'],
+    },
 )

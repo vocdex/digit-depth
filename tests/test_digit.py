@@ -2,7 +2,7 @@ import unittest
 
 from digit_interface import Digit
 
-from src import DigitSensor
+from digit_depth import DigitSensor
 
 
 class TestDigit(unittest.TestCase):

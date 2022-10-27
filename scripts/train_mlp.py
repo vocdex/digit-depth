@@ -7,7 +7,7 @@ import wandb
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-from src.train import MLP, Color2NormalDataset
+from digit_depth.train import MLP, Color2NormalDataset
 
 seed = 42
 torch.seed = seed

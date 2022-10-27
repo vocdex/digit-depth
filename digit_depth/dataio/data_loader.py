@@ -4,7 +4,7 @@
 import torchvision.transforms as transforms
 from torch.utils.data import DataLoader
 
-from src.dataio.digit_dataset import DigitRealImageAnnotDataset
+from digit_depth.dataio.digit_dataset import DigitRealImageAnnotDataset
 
 
 def data_loader(dir_dataset, params):

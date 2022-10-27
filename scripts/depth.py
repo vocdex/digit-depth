@@ -7,10 +7,10 @@ import rospy
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
 from sensor_msgs.msg import CompressedImage
-from src.third_party import geom_utils
-from src.digit import DigitSensor
-from src.train import MLP
-from src.train.prepost_mlp import *
+from digit_depth.third_party import geom_utils
+from digit_depth.digit import DigitSensor
+from digit_depth.train import MLP
+from digit_depth.train.prepost_mlp import *
 from PIL import Image
 seed = 42
 torch.seed = seed

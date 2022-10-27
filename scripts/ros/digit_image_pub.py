@@ -14,7 +14,7 @@ import rospy
 # Ros Messages
 from sensor_msgs.msg import CompressedImage
 from sensor_msgs.msg import std_msgs
-from src.digit.digit_sensor import DigitSensor
+from digit_depth.digit.digit_sensor import DigitSensor
 
 
 class ImageFeature:

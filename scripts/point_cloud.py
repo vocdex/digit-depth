@@ -3,12 +3,12 @@
 import os
 import hydra
 import open3d as o3d
-from src.third_party import geom_utils
-from src.digit import DigitSensor
-from src.train import MLP
-from src.train.prepost_mlp import *
+from digit_depth.third_party import geom_utils
+from digit_depth.digit import DigitSensor
+from digit_depth.train import MLP
+from digit_depth.train.prepost_mlp import *
 from attrdict import AttrDict
-from src.third_party import vis_utils
+from digit_depth.third_party import vis_utils
 seed = 42
 torch.seed = seed
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')

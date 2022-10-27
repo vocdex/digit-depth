@@ -1,6 +1,6 @@
 .idea
-src/__pycache__/
-src/digit/__pycache__/
+digit_depth/__pycache__/
+digit_depth/digit/__pycache__/
 /*.egg-info
 /dist/
 *.pyc

@@ -9,7 +9,7 @@ import os.path
 
 import cv2
 
-from src.digit.digit_sensor import DigitSensor
+from digit_depth.digit.digit_sensor import DigitSensor
 
 base_path = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 
@@ -43,7 +43,7 @@ if __name__ == "__main__":
 
     if not os.path.exists(os.path.join(base_path, "images")):
         os.makedirs(os.path.join(base_path, "images"), exist_ok=True)
-        print("Directory {} created for saving images".format(args.dir_name))
+        print("Directory {} created for saving images".format(os.path.join(base_path, "images")))
     digit = DigitSensor(args.fps, args.resolution, args.serial_num)
 
     record_frame(digit, os.path.join(base_path, "images"))

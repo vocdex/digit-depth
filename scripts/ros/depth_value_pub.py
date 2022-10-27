@@ -4,10 +4,10 @@ import hydra
 import rospy
 from std_msgs.msg import Float32
 
-from src.third_party import geom_utils
-from src.digit.digit_sensor import DigitSensor
-from src.train.mlp_model import MLP
-from src.train.prepost_mlp import *
+from digit_depth.third_party import geom_utils
+from digit_depth.digit.digit_sensor import DigitSensor
+from digit_depth.train.mlp_model import MLP
+from digit_depth.train.prepost_mlp import *
 seed = 42
 torch.seed = seed
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')

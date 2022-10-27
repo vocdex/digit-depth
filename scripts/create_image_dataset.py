@@ -10,11 +10,11 @@ import imageio
 import numpy as np
 import torch
 
-from src.dataio.create_csv import (combine_csv, create_pixel_csv,
-                                   create_train_test_csv)
-from src.dataio.data_loader import data_loader
-from src.dataio.generate_sphere_gt_normals import generate_sphere_gt_normals
-from src.third_party import data_utils
+from digit_depth.dataio.create_csv import (combine_csv, create_pixel_csv,
+                                           create_train_test_csv)
+from digit_depth.dataio.data_loader import data_loader
+from digit_depth.dataio.generate_sphere_gt_normals import generate_sphere_gt_normals
+from digit_depth.third_party import data_utils
 
 base_path = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 

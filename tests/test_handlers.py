@@ -1,7 +1,7 @@
 import unittest
 import torch
 from PIL import Image
-from src.handlers import image
+from digit_depth.handlers import image
 
 class Handler(unittest.TestCase):
     """Test for various data handlers"""
