@@ -51,7 +51,7 @@ def show_point_cloud(cfg):
         gradx_img, grady_img = geom_utils._normal_to_grad_depth(img_normal=img_np, gel_width=cfg.sensor.gel_width,
                                                                 gel_height=cfg.sensor.gel_height,bg_mask=None)
         # reconstruct depth
-        img_depth = geom_utils._integrate_grad_depth(gradx_img, grady_img, boundary=None, bg_mask=None,max_depth=0.0237)
+        img_depth = geom_utils._integrate_grad_depth(gradx_img, grady_img, boundary=None, bg_mask=None, max_depth=0.0237)
         view_mat = torch.eye(4)  # torch.inverse(T_cam_offset)
         # Project depth to 3D
         points3d = geom_utils.depth_to_pts3d(depth=img_depth, P=proj_mat, V=view_mat, params=cfg.sensor)
