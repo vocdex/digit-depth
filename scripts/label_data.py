@@ -45,9 +45,9 @@ def click_and_store(event, x, y, flags, param):
         with open(filename, "a") as csvfile:
             writer = csv.writer(csvfile)
             print("Writing>>")
+            print('Writing to file: ', filename)
             count += 1
             writer.writerow([img_name, center_x, center_y, int(radius)])
-
 
 if __name__ == "__main__":
     argparser = argparse.ArgumentParser()

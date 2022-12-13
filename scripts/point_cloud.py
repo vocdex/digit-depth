@@ -40,7 +40,7 @@ def show_point_cloud(cfg):
                                                       max_depth=0.0237)
     img_depth_base = img_depth_base.detach().cpu().numpy() # final depth image for base image
     # setup digit sensor
-    digit = DigitSensor(30, "QVGA", cfg.sensor.serial_num)
+    digit = DigitSensor(60, "QVGA", cfg.sensor.serial_num)
     digit_call = digit()
     while True:
         frame = digit_call.get_frame()

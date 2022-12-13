@@ -50,8 +50,8 @@ def train(train_loader, epochs, lr):
                 print('Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}'
                       .format(epoch + 1, num_epochs, i + 1, total_step, loss.item()))
                 loss_record.append(loss.item())
-                # wandb.log({"Mini-batch loss": loss})
-        # wandb.log({'Running test loss': avg_loss / cnt})
+                wandb.log({"Mini-batch loss": loss})
+        wandb.log({'Running test loss': avg_loss / cnt})
     os.makedirs(f"{base_path}/models", exist_ok=True)
     print(f"Saving model to {base_path}/models/")
     torch.save(model,
