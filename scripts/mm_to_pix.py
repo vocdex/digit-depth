@@ -10,7 +10,8 @@ import cv2
 import math
 import argparse
 import os
-
+from record import record_frame
+from digit_depth.digit import DigitSensor
 # Global variables
 dist = None
 click_a = None
@@ -39,11 +40,19 @@ def click_cb(event, x, y, flags, param):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--dist_mm", type=float, help="Distance in mm")
-    parser.add_argument("--img_path", type=str, help="Path to image")
+    parser.add_argument("--dist_mm", type=float, required=True, help="Distance between 2 measure points in mm")
+    parser.add_argument("--fps", type=int, default=30, help="Frames per second. Max:60 on QVGA")
+    parser.add_argument("--resolution", type=str, default="QVGA", help="QVGA, VGA")
+    parser.add_argument("--serial_num", type=str, default="D00003", help="Serial number of DIGIT")
     args = parser.parse_args()
+    digit = DigitSensor(args.fps, args.resolution, args.serial_num)
     dist = args.dist_mm
-    img_path = args.img_path
+    dir_path = os.path.join(base_path, "mm_to_pix")
+    if not os.path.exists(dir_path):
+        os.makedirs(dir_path, exist_ok=True)
+        print("Directory {} created for saving mm_to_pix images".format(dir_path))
+    record_frame(digit, os.path.join(base_path, "mm_to_pix"))
+    img_path = os.path.join(base_path, "mm_to_pix", "frame_1.png")
     for i in range(4):
         img = cv2.imread(img_path)
         cv2.imshow("Click the two points of the calipers", img)
