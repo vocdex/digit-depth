@@ -35,7 +35,6 @@ def train(train_loader, epochs, lr):
     total_step = len(train_loader)
     for epoch in tqdm(range(1, 1 + num_epochs)):
         for i, (data, labels) in enumerate(train_loader):
-            # Move tensors to the configured device
             data = data.to(device)
             labels = labels.to(device)
 
