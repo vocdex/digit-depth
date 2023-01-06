@@ -27,4 +27,6 @@ scripts/~/
 framex.png
 outputs
 wandb/
-config/
+configs
+mm_to_pix
+mlp.ckpt
