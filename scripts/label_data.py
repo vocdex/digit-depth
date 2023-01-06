@@ -19,9 +19,9 @@ import cv2
 
 base_path = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 
-
+headers_written=False
 def click_and_store(event, x, y, flags, param):
-    global count
+    global count, headers_written
     global center_x, center_y, circumference_x, circumference_y, radii
     if event == cv2.EVENT_LBUTTONDOWN:
         center_x = x
@@ -44,6 +44,9 @@ def click_and_store(event, x, y, flags, param):
         radii.append(int(radius))
         with open(filename, "a") as csvfile:
             writer = csv.writer(csvfile)
+            if not headers_written:
+                writer.writerow(["img_name", "center_x", "center_y", "radius"])
+                headers_written = True
             print("Writing>>")
             print('Writing to file: ', filename)
             count += 1
