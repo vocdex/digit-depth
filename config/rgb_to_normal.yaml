@@ -1,3 +1,4 @@
+# This is an example config file. Make sure to change gel and path specific variables depending on your measurements.
 prefix: ""
 random_seed: 0
 save_csv: False
