@@ -9,7 +9,7 @@ from torch.utils.data import DataLoader
 from tqdm import tqdm
 
 from digit_depth.train import MLP, Color2NormalDataset
-
+from digit_depth.handlers import get_save_path
 seed = 42
 torch.seed = seed
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -54,8 +54,9 @@ def train(train_loader, epochs, lr):
         wandb.log({'Running loss': avg_loss / cnt})
     os.makedirs(f"{base_path}/models", exist_ok=True)
     print(f"Saving model to {base_path}/models/")
+    save_name = get_save_path(seed, head=f"{base_path}/models/")
     torch.save(model,
-               f"{base_path}/models/mlp.ckpt")
+               f"{save_name}.ckpt")
 
 
 def test(test_loader,criterion):
@@ -76,10 +77,10 @@ def test(test_loader,criterion):
             loss = criterion(outputs, labels)
             avg_loss += loss.item()
             cnt=cnt+1
-            # wandb.log({"Mini-batch test loss": loss})
+            wandb.log({"Mini-batch test loss": loss})
         avg_loss = avg_loss / cnt
         print("Test loss: {:.4f}".format(avg_loss))
-        # wandb.log({'Average Test loss': avg_loss})
+        wandb.log({'Average Test loss': avg_loss})
 
 
 def main():
