@@ -36,7 +36,7 @@ def main(cfg):
         os.makedirs(f"{dir}", exist_ok=True)
     # iterate over images
     img_idx = 0
-    radius_bearing = np.int32(0.5 * 6.0 * cfg.mm_to_pixel)
+    radius_bearing = np.int32(0.5 * cfg.ball_diameter * cfg.mm_to_pixel)
     while img_idx < len(normal_dataset):
         # read img + annotations
         data = normal_dataset[img_idx]

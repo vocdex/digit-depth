@@ -17,9 +17,10 @@ base_path = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 def record_frame(digit_sensor, dir_name: str):
     img_counter = len(os.listdir(dir_name))
     digit_call = digit_sensor()
+    serial_num = digit_call.serial
     while True:
         frame = digit_call.get_frame()
-        cv2.imshow(f"{args.serial_num}", frame)
+        cv2.imshow(f"{digit_call.serial}", frame)
         k = cv2.waitKey(1)
         if k % 256 == 27:
             # ESC hit
@@ -38,8 +39,9 @@ if __name__ == "__main__":
     argparser = argparse.ArgumentParser()
     argparser.add_argument("--fps", type=int, default=30, help="Frames per second. Max:60 on QVGA")
     argparser.add_argument("--resolution", type=str, default="QVGA", help="QVGA, VGA")
-    argparser.add_argument("--serial_num", type=str, default="D20001", help="Serial number of DIGIT")
+    argparser.add_argument("--serial_num", type=str, default="D00003", help="Serial number of DIGIT")
     args = argparser.parse_args()
+
 
     if not os.path.exists(os.path.join(base_path, "images")):
         os.makedirs(os.path.join(base_path, "images"), exist_ok=True)
