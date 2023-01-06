@@ -26,4 +26,4 @@ scripts/~/
 ~/
 framex.png
 outputs
-./wandb
+wandb/
