@@ -4,11 +4,12 @@ from digit_interface import Digit
 from digit_interface.digit import DigitDefaults
 
 
-class DigitSensor:
+class DigitSensor(Digit):
     def __init__(self, fps: int, resolution: str, serial_num: str):
+        super().__init__()
         self.fps = fps
         self.resolution = resolution
-        self.serial_num = serial_num
+        self.serial=serial_num
 
     def __call__(self, *args, **kwargs):
         """Calls the digit sensor."""
@@ -16,12 +17,12 @@ class DigitSensor:
         return digit
 
     def __str__(self):
-        return f"DigitSensor(fps={self.fps}, resolution={self.resolution}, serial_num={self.serial_num})"
+        return f"DigitSensor(fps={self.fps}, resolution={self.resolution}, serial_num={self.serial})"
 
     def setup_digit(self,):
-        "Sets up the digit sensor and returns it."
+        """Sets up the digit sensor and returns it."""
 
-        digit = Digit(self.serial_num)
+        digit = Digit(self.serial)
         digit.connect()
 
         rgb_list = [(15, 0, 0), (0, 15, 0), (0, 0, 15)]

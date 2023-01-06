@@ -29,7 +29,7 @@ class DigitRealImageAnnotDataset(Dataset):
         # read in region annotations
         if self.annot_flag:
             img_name = self.img_files[idx]
-            row_filter = self.annot_dataframe["img_names"] == img_name
+            row_filter = self.annot_dataframe["img_name"] == img_name
             region_attr = self.annot_dataframe.loc[
                 row_filter, ["center_x", "center_y", "radius"]
             ]

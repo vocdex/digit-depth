@@ -1,3 +1,4 @@
+# This is an example config file. Make sure to change gel and path specific variables depending on your measurements.
 prefix: ""
 random_seed: 0
 save_csv: False
@@ -16,7 +17,7 @@ dataset:
   save_dataset: True
 sensor:
   mesh_name: adigit.STL
-  serial_num: "D00001"
+  serial_num: "D20001"
   T_cam_offset: [ [ 2.22e-16, 2.22e-16, -1.00e+00, 0.00e+00 ],
                     [ -1.00e+00, 0.00e+00, -2.22e-16, 0.00e+00 ],
                     [ 0.00e+00, 1.00e+00, 2.22e-16, 1.50e-02 ],
@@ -35,6 +36,6 @@ sensor:
 
 base_path: "/home/shuk/digit-depth"
 model_path: "/home/shuk/digits2/tactile-in-hand/inhandpy/local/Mike/mike.ckpt"
-base_img_path: "/home/shuk/digit-depth/images/0014.png"
+base_img_path: "/home/shuk/digit-depth/images/frame_40.png"
 mm_to_pixel: 21.09
 
