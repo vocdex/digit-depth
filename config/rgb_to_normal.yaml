@@ -32,8 +32,8 @@ sensor:
   z_near: 0.001
   z_far: 0.05
 
-  gel_width: 0.02  # "D00001" 0.01835  # gel width (y-axis) in meters //original: 0.02
-  gel_height: 0.03   # "D00001"0.02490 # gel height (x-axis) in meters //original: 0.03
+  gel_width: 0.01835  # gel width (y-axis) in meters //original: 0.02
+  gel_height: 0.02490 # gel height (x-axis) in meters //original: 0.03
 
 base_path: "/home/shuk/digit-depth"
 model_path: "/home/shuk/digit-depth/models/2023-01-06-19-15_042.ckpt"
