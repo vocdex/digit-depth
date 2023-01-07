@@ -17,7 +17,8 @@ dataset:
   save_dataset: True
 sensor:
   mesh_name: adigit.STL
-  serial_num: "D20001"
+  serial_num: "D00003"
+  fps : 30 # Max is 60
   T_cam_offset: [ [ 2.22e-16, 2.22e-16, -1.00e+00, 0.00e+00 ],
                     [ -1.00e+00, 0.00e+00, -2.22e-16, 0.00e+00 ],
                     [ 0.00e+00, 1.00e+00, 2.22e-16, 1.50e-02 ],
@@ -35,7 +36,7 @@ sensor:
   gel_height: 0.03   # "D00001"0.02490 # gel height (x-axis) in meters //original: 0.03
 
 base_path: "/home/shuk/digit-depth"
-model_path: "/home/shuk/digits2/tactile-in-hand/inhandpy/local/Mike/mike.ckpt"
-base_img_path: "/home/shuk/digit-depth/images/frame_40.png"
-mm_to_pixel: 21.09
-
+model_path: "/home/shuk/digit-depth/models/2023-01-06-19-15_042.ckpt"
+base_img_path: "/home/shuk/digit-depth/images/frame_43.png"
+mm_to_pixel: 17.04
+ball_diameter: 6.0  # in mm
