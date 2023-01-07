@@ -59,10 +59,15 @@ def train(train_loader, epochs, lr):
                f"{save_name}.ckpt")
 
 
+def find_recent_model(model_dir):
+    import glob
+    model_paths = glob.glob(f"{model_dir}/*.ckpt")
+    model_paths.sort(key=os.path.getmtime)
+    return model_paths[-1]
+
 def test(test_loader,criterion):
-    model = torch.load(
-        f"{base_path}/models/mlp.ckpt").to(
-        device)
+    most_recent_model = find_recent_model(f"{base_path}/models")
+    model = torch.load(most_recent_model).to(device)
     model.eval()
     wandb.init(project="MLP", name="Color 2 Normal model test")
     wandb.watch(model, log_freq=100)
@@ -79,8 +84,8 @@ def test(test_loader,criterion):
             cnt=cnt+1
             wandb.log({"Mini-batch test loss": loss})
         avg_loss = avg_loss / cnt
-        print("Test loss: {:.4f}".format(avg_loss))
-        wandb.log({'Average Test loss': avg_loss})
+        print("Average test loss: {:.4f}".format(avg_loss))
+        wandb.log({'Average test loss': avg_loss})
 
 
 def main():
@@ -88,7 +93,7 @@ def main():
     argparser.add_argument('--mode', type=str, default='train', help='train or test')
     argparser.add_argument('--batch_size', type=int, default=3200, help='batch size')
     argparser.add_argument('--learning_rate', type=float, default=0.001, help='learning rate')
-    argparser.add_argument('--epochs', type=int, default=50, help='epochs')
+    argparser.add_argument('--epochs', type=int, default=30, help='epochs')
     argparser.add_argument('--train_path', type=str, default=f'{base_path}/datasets/train_test_split/train.csv',
                            help='data path')
     argparser.add_argument('--test_path', type=str, default=f'{base_path}/datasets/train_test_split/test.csv',
