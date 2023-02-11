@@ -61,6 +61,8 @@ if __name__ == "__main__":
     filename = args.csv
     img_folder = os.path.join(base_path, args.folder)
     img_files = sorted(glob.glob(f"{img_folder}/*.png"))
+    img_files = [img_file for img_file in img_files if os.path.basename(img_file) != "background.png"]
+
     os.makedirs(os.path.join(base_path, "csv"), exist_ok=True)
     center_x, center_y, circumference_x, circumference_y, radii = [], [], [], [], []
     count = 0

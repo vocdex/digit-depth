@@ -18,7 +18,7 @@ from digit_depth.third_party import data_utils
 
 base_path = Path(__file__).parent.parent.resolve()
 
-@hydra.main(config_path=f"{base_path}/config", config_name="rgb_to_normal.yaml", version_base=None)
+@hydra.main(config_path=f"{base_path}/config", config_name="digit.yaml", version_base=None)
 def main(cfg):
     normal_dataloader, normal_dataset = data_loader(
         dir_dataset=os.path.join(base_path, "images"), params=cfg.dataloader

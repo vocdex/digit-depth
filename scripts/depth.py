@@ -25,7 +25,7 @@ class ImageFeature:
 
 @hydra.main(config_path=f"{base_path}/config", config_name="digit.yaml", version_base=None)
 def show_depth(cfg):
-    model_path = find_recent_model(base_path)
+    model_path = find_recent_model(f"{base_path}/models")
     model = torch.load(model_path).to(device)
     model.eval()
     ic = ImageFeature()
