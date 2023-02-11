@@ -1,7 +1,7 @@
-""" By default, depth image measures the distance from the camera to the gel surface. 
-When the gel is not deformed, the depth value is max depth.When the gel is deformed, this value gets smaller.
-This node publishes the difference between that max depth(no deformation)
-and min depth(max deformation)
+"""
+    By default, depth image measures the distance from the camera to the gel surface. 
+    When the gel is not deformed, the depth value is max depth.When the gel is deformed, this value gets smaller.
+    This node publishes the difference between that max depth(no deformation) and min depth(max deformation).
 """
 import hydra
 import rospy
@@ -11,12 +11,14 @@ from std_msgs.msg import Float32
 from digit_depth.third_party import geom_utils
 from digit_depth.digit.digit_sensor import DigitSensor
 from digit_depth.train.prepost_mlp import *
+from digit_depth.handlers import find_recent_model
 
 seed = 42
 torch.seed = seed
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 base_path = Path(__file__).parent.parent.parent.resolve()
-print(base_path)
+
+
 def get_depth_values(cfg,model, img_np):
     """
     Calculate the depth values for an image using the given model.
@@ -53,7 +55,7 @@ def publish_depth_difference(model, cfg, pub):
     - cfg: Configuration object
     - pub: Publisher for publishing depth difference
     """
-    digit = DigitSensor(cfg.sensor.fps, "QVGA", cfg.sensor.serial_num)
+    digit = DigitSensor(cfg.sensor.fps, cfg.sensor.resolution, cfg.sensor.serial_num)
     digit_call = digit()
     try:
         while not rospy.is_shutdown():
@@ -74,7 +76,8 @@ def publish_depth_difference(model, cfg, pub):
 
 @hydra.main(config_path=f"{base_path}/config", config_name="digit.yaml", version_base=None)
 def main(cfg):
-    model = torch.load(cfg.model_path).to(device)
+    model_path = find_recent_model(f"{base_path}/models")
+    model = torch.load(model_path).to(device)
     model.eval()
     pub = rospy.Publisher('digit/depth/value', Float32, queue_size=1)
     rospy.init_node('depth', anonymous=True)

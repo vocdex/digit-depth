@@ -8,6 +8,7 @@ from digit_depth.train import MLP
 from digit_depth.train.prepost_mlp import *
 from attrdict import AttrDict
 from digit_depth.third_party import vis_utils
+from digit_depth.handlers import find_recent_model, find_background_img
 seed = 42
 torch.seed = seed
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -22,15 +23,17 @@ def show_point_cloud(cfg):
 
     # projection params
     proj_mat = torch.tensor(cfg.sensor.P)
-    model = torch.load(cfg.model_path).to(device)
+    model_path = find_recent_model(f"{base_path}/models")
+    model = torch.load(model_path).to(device)
     model.eval()
     # base image depth map
-    base_img = cv2.imread(cfg.base_img_path)
-    base_img = preproc_mlp(base_img)
-    base_img_proc = model(base_img).cpu().detach().numpy()
-    base_img_proc, _ = post_proc_mlp(base_img_proc)
+    background_img_path = find_background_img(base_path)
+    background_img = cv2.imread(background_img_path)
+    background_img = preproc_mlp(background_img)
+    background_img_proc = model(background_img).cpu().detach().numpy()
+    background_img_proc, _ = post_proc_mlp(background_img_proc)
     # get gradx and grady
-    gradx_base, grady_base = geom_utils._normal_to_grad_depth(img_normal=base_img_proc, gel_width=cfg.sensor.gel_width,
+    gradx_base, grady_base = geom_utils._normal_to_grad_depth(img_normal=background_img_proc, gel_width=cfg.sensor.gel_width,
                                                               gel_height=cfg.sensor.gel_height, bg_mask=None)
 
     # reconstruct depth
@@ -38,7 +41,7 @@ def show_point_cloud(cfg):
                                                       max_depth=0.0237)
     img_depth_base = img_depth_base.detach().cpu().numpy() # final depth image for base image
     # setup digit sensor
-    digit = DigitSensor(60, "QVGA", cfg.sensor.serial_num)
+    digit = DigitSensor(cfg.sensor.fps, cfg.sensor.resolution, cfg.sensor.serial_num)
     digit_call = digit()
     while True:
         frame = digit_call.get_frame()

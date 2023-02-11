@@ -13,7 +13,7 @@ from torch.utils.data import DataLoader
 from tqdm import tqdm
 
 from digit_depth.train import MLP, Color2NormalDataset
-from digit_depth.handlers import get_save_path
+from digit_depth.handlers import get_save_path, find_recent_model
 seed = 42
 torch.seed = seed
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -62,11 +62,6 @@ def train(train_loader, epochs, lr):
     torch.save(model,f"{save_name}.ckpt")
 
 
-def find_recent_model(model_dir):
-    model_paths = glob.glob(f"{model_dir}/*.ckpt")
-    model_paths.sort(key=os.path.getmtime)
-    return model_paths[-1]
-
 def test(test_loader,criterion):
     most_recent_model = find_recent_model(f"{base_path}/models")
     model = torch.load(most_recent_model).to(device)
@@ -114,7 +109,6 @@ def main():
         test_loader = DataLoader(test_set, batch_size=option.batch_size, shuffle=True)
         criterion = nn.MSELoss()
         test(test_loader, criterion)
-
 
 
 if __name__ == "__main__":
