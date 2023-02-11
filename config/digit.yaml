@@ -1,33 +1,43 @@
 # This is an example config file. Make sure to change gel and path specific variables depending on your measurements.
-model_path: "models/checkpoints/mlp_depth.ckpt"
-visualize:
-  depth:
-    enabled: True
-    compute_type: "cuda"
-  point3d:
-    enabled: True
-    compute_type: "cuda"
+
+# Hydra-related configs
+defaults:  
+  - _self_  
+  - override hydra/hydra_logging: disabled  
+  - override hydra/job_logging: disabled  
+  
+hydra:  
+  output_subdir: null  
+  run:  
+    dir: .
+
+# DIGIT config
 sensor:
-  mesh_name: adigit.STL
-  serial_num: "D20001"
-
-  T_cam_offset: [[2.22e-16, 2.22e-16, -1.00e+00, 0.00e+00],
-                [-1.00e+00, 0.00e+00, -2.22e-16, 0.00e+00],
-                [0.00e+00, 1.00e+00, 2.22e-16, 1.50e-02],
-                [0.00e+00, 0.00e+00, 0.00e+00, 1.00e+00]]
-
-  P:  [[2.30940108e+00, 0.00000000e+00, 0.00000000e+00, 0.00000000e+00],
-       [0.00000000e+00, 1.73205081e+00, 0.00000000e+00, 0.00000000e+00],
-       [0.00000000e+00, 0.00000000e+00, -1.04081633e+00, -2.04081633e-03],
-       [0.00000000e+00, 0.00000000e+00, -1.00000000e+00, 0.00000000e+00]]
-  view_params:
-    fov: 60
-    front: [ -0.1, 0.1, 0.1 ]
-    lookat: [-0.001, -0.01, 0.01 ]
-    up: [ 0.04, -0.05, 0.190 ]
-    zoom: 2.5
+  serial_num: "D00001"
+  resolution: "QVGA" # QVGA, VGA
+  fps : 30 # Max is 60
   z_near: 0.001
   z_far: 0.05
 
   gel_width: 0.01835  # gel width (y-axis) in meters //original: 0.02
   gel_height: 0.02490 # gel height (x-axis) in meters //original: 0.03
+
+mm_to_pixel: 17.04 # 1 mm = 17.04 pixels
+ball_diameter: 6.0  # in mm
+
+# Depth configs
+prefix: ""
+random_seed: 0
+save_csv: False
+visualize:
+  normals: True
+  points3d: True
+
+dataloader:
+  batch_size: 1
+  shuffle: False
+  num_workers: 8
+  annot_flag: True
+dataset:
+  dataset_type: 'imgs'
+  save_dataset: True
