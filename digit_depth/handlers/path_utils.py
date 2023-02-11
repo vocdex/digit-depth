@@ -4,7 +4,7 @@ import os
 
 def get_save_path(seed, head: str = "models"):
     """
-    Make save path for whatever agent we are training.
+    Make save path for whatever we are training.
     """
     date = '{}'.format( datetime.datetime.now().strftime('%Y-%m-%d-%H-%M') )
     print(date)
