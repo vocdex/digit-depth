@@ -1,5 +1,5 @@
 """
-Labels images for training MLP depth reconstruction model.
+Label images for training MLP depth reconstruction model.
 Specify the image folder containing the circle images and csv folder to store the labels ( img_names, center_x, center_y, radius ).
 The image datasets should include the rolling of a sphere with a known radius.
 
@@ -14,12 +14,13 @@ import csv
 import glob
 import math
 import os
-
 import cv2
+from pathlib import Path
 
-base_path = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
-
+base_path = Path(__file__).parent.parent.resolve()
 headers_written=False
+
+
 def click_and_store(event, x, y, flags, param):
     global count, headers_written
     global center_x, center_y, circumference_x, circumference_y, radii

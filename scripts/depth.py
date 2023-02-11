@@ -4,6 +4,7 @@ import os
 import cv2
 import hydra
 import rospy
+from pathlib import Path
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
 from digit_depth.third_party import geom_utils
@@ -12,7 +13,7 @@ from digit_depth.train.prepost_mlp import *
 seed = 42
 torch.seed = seed
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-BASE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
+base_path = Path(__file__).parent.parent.resolve()
 
 class ImageFeature:
     def __init__(self):
@@ -21,7 +22,7 @@ class ImageFeature:
         self.br = CvBridge()
 
 
-@hydra.main(config_path=f"{BASE_PATH}/config", config_name="rgb_to_normal.yaml", version_base=None)
+@hydra.main(config_path=f"{base_path}/config", config_name="rgb_to_normal.yaml", version_base=None)
 def show_depth(cfg):
     model = torch.load(cfg.model_path).to(device)
     model.eval()

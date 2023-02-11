@@ -3,9 +3,9 @@ When the gel is not deformed, the depth value is max depth.When the gel is defor
 This node publishes the difference between that max depth(no deformation)
 and min depth(max deformation)
 """
-import os
 import hydra
 import rospy
+from pathlib import Path
 from std_msgs.msg import Float32
 
 from digit_depth.third_party import geom_utils
@@ -15,9 +15,8 @@ from digit_depth.train.prepost_mlp import *
 seed = 42
 torch.seed = seed
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-BASE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
-
-
+base_path = Path(__file__).parent.parent.parent.resolve()
+print(base_path)
 def get_depth_values(cfg,model, img_np):
     """
     Calculate the depth values for an image using the given model.
@@ -73,7 +72,7 @@ def publish_depth_difference(model, cfg, pub):
         digit().disconnect()
 
 
-@hydra.main(config_path=f"{BASE_PATH}/config", config_name="rgb_to_normal.yaml", version_base=None)
+@hydra.main(config_path=f"{base_path}/config", config_name="digit.yaml", version_base=None)
 def main(cfg):
     model = torch.load(cfg.model_path).to(device)
     model.eval()

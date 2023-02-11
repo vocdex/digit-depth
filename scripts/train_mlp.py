@@ -5,6 +5,10 @@ import os
 import torch
 import torch.nn as nn
 import wandb
+import glob
+
+from pathlib import Path
+
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
@@ -13,7 +17,7 @@ from digit_depth.handlers import get_save_path
 seed = 42
 torch.seed = seed
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-base_path = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+base_path = Path(__file__).parent.parent.resolve()
 
 
 def train(train_loader, epochs, lr):
@@ -55,12 +59,10 @@ def train(train_loader, epochs, lr):
     os.makedirs(f"{base_path}/models", exist_ok=True)
     print(f"Saving model to {base_path}/models/")
     save_name = get_save_path(seed, head=f"{base_path}/models/")
-    torch.save(model,
-               f"{save_name}.ckpt")
+    torch.save(model,f"{save_name}.ckpt")
 
 
 def find_recent_model(model_dir):
-    import glob
     model_paths = glob.glob(f"{model_dir}/*.ckpt")
     model_paths.sort(key=os.path.getmtime)
     return model_paths[-1]
@@ -112,6 +114,7 @@ def main():
         test_loader = DataLoader(test_set, batch_size=option.batch_size, shuffle=True)
         criterion = nn.MSELoss()
         test(test_loader, criterion)
+
 
 
 if __name__ == "__main__":

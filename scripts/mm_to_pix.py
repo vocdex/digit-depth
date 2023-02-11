@@ -10,6 +10,7 @@ import cv2
 import math
 import argparse
 import os
+from pathlib import Path
 from record import record_frame
 from digit_depth.digit import DigitSensor
 # Global variables
@@ -17,7 +18,7 @@ dist = None
 click_a = None
 total_measurements = []
 
-base_path = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+base_path = Path(__file__).parent.parent.resolve()
 
 def click_cb(event, x, y, flags, param):
     global dist, click_a

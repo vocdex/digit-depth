@@ -45,7 +45,7 @@ def record_frame(cfg):
     cv2.destroyAllWindows()
 
 
-def create_dir(dir_name):
+def create_dir(dir_name:str):
     if not os.path.exists(dir_name):
         os.makedirs(dir_name)
         print("Directory {} created for saving images".format(dir_name))

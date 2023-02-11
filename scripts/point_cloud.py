@@ -1,8 +1,7 @@
-""" Publishes a ROS topic with name /depth/compressed and shows the image on OpenCV window.
-    Issues: rqt_image_view is not showing the image due to some data conversion issues but OpenCV is showing the image."""
-import os
+""" Shows 3D depth point cloud with Open3D"""
 import hydra
 import open3d as o3d
+from pathlib import Path
 from digit_depth.third_party import geom_utils
 from digit_depth.digit import DigitSensor
 from digit_depth.train import MLP
@@ -12,17 +11,16 @@ from digit_depth.third_party import vis_utils
 seed = 42
 torch.seed = seed
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-base_path = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+base_path = Path(__file__).parent.parent.resolve()
 
 
-@hydra.main(config_path="/home/shuk/digit-depth/config", config_name="rgb_to_normal.yaml", version_base=None)
+@hydra.main(config_path="f{base_path}/config", config_name="digit.yaml", version_base=None)
 def show_point_cloud(cfg):
     view_params = AttrDict({'fov': 60, 'front': [-0.1, 0.1, 0.1], 'lookat': [
         -0.001, -0.01, 0.01], 'up': [0.04, -0.05, 0.190], 'zoom': 2.5})
     vis3d = vis_utils.Visualizer3d(base_path=base_path, view_params=view_params)
 
     # projection params
-    T_cam_offset = torch.tensor(cfg.sensor.T_cam_offset)
     proj_mat = torch.tensor(cfg.sensor.P)
     model = torch.load(cfg.model_path).to(device)
     model.eval()
@@ -30,7 +28,7 @@ def show_point_cloud(cfg):
     base_img = cv2.imread(cfg.base_img_path)
     base_img = preproc_mlp(base_img)
     base_img_proc = model(base_img).cpu().detach().numpy()
-    base_img_proc, normal_base = post_proc_mlp(base_img_proc)
+    base_img_proc, _ = post_proc_mlp(base_img_proc)
     # get gradx and grady
     gradx_base, grady_base = geom_utils._normal_to_grad_depth(img_normal=base_img_proc, gel_width=cfg.sensor.gel_width,
                                                               gel_height=cfg.sensor.gel_height, bg_mask=None)
@@ -46,12 +44,12 @@ def show_point_cloud(cfg):
         frame = digit_call.get_frame()
         img_np = preproc_mlp(frame)
         img_np = model(img_np).detach().cpu().numpy()
-        img_np, normal_img = post_proc_mlp(img_np)
+        img_np, _ = post_proc_mlp(img_np)
         # get gradx and grady
         gradx_img, grady_img = geom_utils._normal_to_grad_depth(img_normal=img_np, gel_width=cfg.sensor.gel_width,
                                                                 gel_height=cfg.sensor.gel_height,bg_mask=None)
         # reconstruct depth
-        img_depth = geom_utils._integrate_grad_depth(gradx_img, grady_img, boundary=None, bg_mask=None, max_depth=0.0237)
+        img_depth = geom_utils._integrate_grad_depth(gradx_img, grady_img, boundary=None, bg_mask=None, max_depth=cfg.max_depth)
         view_mat = torch.eye(4)  # torch.inverse(T_cam_offset)
         # Project depth to 3D
         points3d = geom_utils.depth_to_pts3d(depth=img_depth, P=proj_mat, V=view_mat, params=cfg.sensor)
