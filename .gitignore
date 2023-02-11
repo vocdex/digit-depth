@@ -11,22 +11,12 @@ __pycache__/
 *.csv
 *.pth
 *.jpg
- ../build/
- ../images/
- ../outputs/
  build/
  datasets/
- scripts/outputs
 build/
 images/
 datasets/
-scripts/outputs/
 models/
-scripts/~/
-~/
-framex.png
 outputs
 wandb/
-config
 mm_to_pix
-mlp.ckpt
