@@ -1,7 +1,8 @@
 """
-    By default, depth image measures the distance from the camera to the gel surface. 
+    By default, depth image measures the distance from the camera to the gel surface in meters.
     When the gel is not deformed, the depth value is max depth.When the gel is deformed, this value gets smaller.
     This node publishes the difference between that max depth(no deformation) and min depth(max deformation).
+    Note that we multiply by 1000 to convert from meters to millimeters.
 """
 import hydra
 import rospy
@@ -39,7 +40,7 @@ def get_depth_values(cfg,model, img_np):
         gel_height=cfg.sensor.gel_height, bg_mask=None
     )
     img_depth = geom_utils._integrate_grad_depth(
-        gradx_img, grady_img, boundary=None, bg_mask=None, max_depth=0.0247
+        gradx_img, grady_img, boundary=None, bg_mask=None, max_depth=cfg.max_depth
     )
     img_depth = img_depth.detach().cpu().numpy().flatten()
     return img_depth
@@ -65,9 +66,12 @@ def publish_depth_difference(model, cfg, pub):
 
             img_depth = get_depth_values(cfg,model, frame)
             max_depth = np.min(img_depth)
+            print(f"Max depth : {max_depth}")
             min_depth = np.max(img_depth)
+            print(f"Min depth : {min_depth}")
             depth_difference = np.abs((max_depth - min_depth))
-            pub.publish(Float32(depth_difference * 10000))  # convert to mm
+            pub.publish(Float32(depth_difference * 1000))  # convert to mm
+            # pub.publish(Float32(max_depth * 1000)) # you can also publish the max depth
             rospy.loginfo(f"Published msg at {rospy.get_time()}")
 
     except KeyboardInterrupt:

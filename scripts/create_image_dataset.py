@@ -20,8 +20,9 @@ base_path = Path(__file__).parent.parent.resolve()
 
 @hydra.main(config_path=f"{base_path}/config", config_name="digit.yaml", version_base=None)
 def main(cfg):
+    annot_file = base_path/"csv"/"annotate.csv"
     normal_dataloader, normal_dataset = data_loader(
-        dir_dataset=os.path.join(base_path, "images"), params=cfg.dataloader
+        dir_dataset=os.path.join(base_path, "images"), annot_file=annot_file, params=cfg.dataloader
     )
     dirs = [
         f"{base_path}/datasets/A/imgs",
@@ -69,7 +70,6 @@ def main(cfg):
         img_normal_np = generate_sphere_gt_normals(
             img_mask, center_x, center_y, radius=radius_bearing
         )
-
         # 2. downsample and convert to NumPy: (320,240,3) -> (160,120,3)
         img_normal_np = data_utils.interpolate_img(
             img=torch.tensor(img_normal_np).permute(2, 0, 1), rows=160, cols=120)
@@ -77,7 +77,6 @@ def main(cfg):
         img_color_ds = data_utils.interpolate_img(
             img=torch.tensor(img_color_np).permute(2, 0, 1), rows=160, cols=120)
         img_color_np = img_color_ds.permute(1, 2, 0).cpu().detach().numpy()
-
         # 3. save csv files for color and normal images
 
         if cfg.dataset.save_dataset:

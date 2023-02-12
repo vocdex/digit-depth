@@ -8,11 +8,11 @@ Usage:
 
 import cv2
 import math
-import argparse
 import os
+import numpy as np
+import hydra
 from pathlib import Path
-from record import record_frame
-from digit_depth.digit import DigitSensor
+from digit_depth.digit.digit_sensor import DigitSensor  
 # Global variables
 dist = None
 click_a = None
@@ -39,26 +39,41 @@ def click_cb(event, x, y, flags, param):
             click_a = None
 
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--dist_mm", type=float, required=True, help="Distance between 2 measure points in mm")
-    parser.add_argument("--fps", type=int, default=30, help="Frames per second. Max:60 on QVGA")
-    parser.add_argument("--resolution", type=str, default="QVGA", help="QVGA, VGA")
-    parser.add_argument("--serial_num", type=str, default="D00003", help="Serial number of DIGIT")
-    args = parser.parse_args()
-    digit = DigitSensor(args.fps, args.resolution, args.serial_num)
-    dist = args.dist_mm
-    dir_path = os.path.join(base_path, "mm_to_pix")
-    if not os.path.exists(dir_path):
-        os.makedirs(dir_path, exist_ok=True)
-        print("Directory {} created for saving mm_to_pix images".format(dir_path))
-    record_frame(digit, os.path.join(base_path, "mm_to_pix"))
-    img_path = os.path.join(base_path, "mm_to_pix", "frame_1.png")
+@hydra.main(config_path=f"{base_path}/config", config_name="digit.yaml", version_base=None)
+def main(cfg):
+    digit_sensor = DigitSensor(cfg.sensor.fps, cfg.sensor.resolution, cfg.sensor.serial_num)
+    digit_call = digit_sensor()
+    if not os.path.exists(f"{base_path}/mm_to_pix"):
+        os.makedirs(f"{base_path}/mm_to_pix")
+    global dist, click_a, img, total_measurements
+    click_a = None
+    total_measurements = []
+    while True:
+        frame = digit_call.get_frame()
+        cv2.imshow(f"{digit_call.serial}", frame)
+        k = cv2.waitKey(1)
+        if k % 256 == 27:
+            # ESC hit
+            print("Escape hit, closing...")
+            break
+        elif k % 256 == 32:
+            # SPACEBAR hit
+            img_name = "{}/frame_{:0>1}.png".format("mm_to_pix", 0)
+            cv2.imwrite(img_name, frame)
+            print("{} written!".format(img_name))
+            img = cv2.imread(img_name)
+            break
+    cv2.destroyAllWindows()
+    img_path = f"{base_path}/mm_to_pix/frame_0.png"
+    img = cv2.imread(img_path)
+    dist = float(input("Enter the distance between the calipers in mm: "))
     for i in range(4):
-        img = cv2.imread(img_path)
         cv2.imshow("Click the two points of the calipers", img)
         cv2.setMouseCallback("Click the two points of the calipers", click_cb)
         cv2.waitKey(0)
         cv2.destroyAllWindows()
-    print("Average Meters per pixel: {}".format(sum(total_measurements)/len(total_measurements)))
+    print("Average mm per pixel: {}".format(np.mean(total_measurements)))
+
+if __name__ == "__main__":
+    main()
 

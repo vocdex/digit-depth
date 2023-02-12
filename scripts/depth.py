@@ -32,23 +32,10 @@ def show_depth(cfg):
     br = CvBridge()
 
     rospy.init_node('depth_node', anonymous=True)
-    # base image depth map
-    background_img_path = find_background_img(base_path)
-    background_img = cv2.imread(background_img_path)
-    background_img = preproc_mlp(background_img)
-    background_img_proc = model(background_img).cpu().detach().numpy()
-    background_img_proc, _ = post_proc_mlp(background_img_proc)
-    # get gradx and grady
-    gradx_base, grady_base = geom_utils._normal_to_grad_depth(img_normal=background_img_proc, gel_width=cfg.sensor.gel_width,
-                                                              gel_height=cfg.sensor.gel_height, bg_mask=None)
-
-    # reconstruct depth
-    img_depth_back = geom_utils._integrate_grad_depth(gradx_base, grady_base, boundary=None, bg_mask=None,
-                                                      max_depth=cfg.max_depth)
-    img_depth_back = img_depth_back.detach().cpu().numpy() # final depth image for base image
-    # setup digit sensor
     digit = DigitSensor(cfg.sensor.fps, cfg.sensor.resolution, cfg.sensor.serial_num)
     digit_call = digit()
+    dm_zero_counter = 0
+    dm_zero = 0
     while not rospy.is_shutdown():
         frame = digit_call.get_frame()
         img_np = preproc_mlp(frame)
@@ -60,15 +47,22 @@ def show_depth(cfg):
         # reconstruct depth
         img_depth = geom_utils._integrate_grad_depth(gradx_img, grady_img, boundary=None, bg_mask=None,max_depth=cfg.max_depth)
         img_depth = img_depth.detach().cpu().numpy() # final depth image for current image
-        # get difference
-        diff = img_depth_back - img_depth
-        diff= diff*8000
-        # print(diff)
-        diff = diff - np.max(diff)
+        # get the first 50 frames and average them to get the zero depth
+        if dm_zero_counter < 50:
+            dm_zero += img_depth
+            dm_zero_counter += 1
+            continue
+        elif dm_zero_counter == 50:
+            dm_zero = dm_zero/50
+            dm_zero_counter += 1
+        
+        # remove the zero depth
+        diff = img_depth - dm_zero
+        # convert pixels into 0-255 range
+        diff = diff*255
         diff = diff*-1
-        # print(diff)
+
         ret, thresh4 = cv2.threshold(diff, 0, 255, cv2.THRESH_TOZERO)
-        # cv2.imshow("depth", thresh4)
         msg = br.cv2_to_imgmsg(thresh4, encoding="passthrough")
         msg.header.stamp = rospy.Time.now()
         ic.image_pub.publish(msg)
@@ -82,5 +76,4 @@ def show_depth(cfg):
 
 if __name__ == "__main__":
     rospy.loginfo("starting...")
-    # show_depth()
-
+    show_depth()

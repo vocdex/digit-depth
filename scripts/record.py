@@ -43,7 +43,7 @@ def record_frame(cfg):
                 print("{} written!".format(img_name))
                 img_counter += 1
     cv2.destroyAllWindows()
-
+    
 
 def create_dir(dir_name:str):
     if not os.path.exists(dir_name):

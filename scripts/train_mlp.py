@@ -88,9 +88,9 @@ def test(test_loader,criterion):
 def main():
     argparser = argparse.ArgumentParser()
     argparser.add_argument('--mode', type=str, default='train', help='train or test')
-    argparser.add_argument('--batch_size', type=int, default=3200, help='batch size')
+    argparser.add_argument('--batch_size', type=int, default=1600, help='batch size')
     argparser.add_argument('--learning_rate', type=float, default=0.001, help='learning rate')
-    argparser.add_argument('--epochs', type=int, default=30, help='epochs')
+    argparser.add_argument('--epochs', type=int, default=40, help='epochs')
     argparser.add_argument('--train_path', type=str, default=f'{base_path}/datasets/train_test_split/train.csv',
                            help='data path')
     argparser.add_argument('--test_path', type=str, default=f'{base_path}/datasets/train_test_split/test.csv',
