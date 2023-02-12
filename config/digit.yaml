@@ -29,11 +29,14 @@ sensor:
   z_far: 0.05
 
   gel_width: 0.01835  # gel width (y-axis) in meters //original: 0.02
-  gel_height: 0.02490 # gel height (x-axis) in meters //original: 0.03
+  gel_height: 0.02460 # gel height (x-axis) in meters //original: 0.03
+  gel_thickness: 0.0046 # gel thickness in meters
+  gel_min_depth: 0.01954 # gel min depth in meters (max deformation) 
 
-mm_to_pixel: 17.04 # 1 mm = 17.04 pixels
+mm_to_pixel: 17.15 # 1 mm = 17.15 pixels
 ball_diameter: 6.0  # in mm
-max_depth: 0.0237 # in meters
+max_depth: 0.02076 # gel max depth in meters (min deformation)
+
 # Depth configs
 prefix: ""
 random_seed: 0
@@ -50,3 +53,4 @@ dataloader:
 dataset:
   dataset_type: 'imgs'
   save_dataset: True
+  save_depth: True
