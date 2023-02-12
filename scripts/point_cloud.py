@@ -17,8 +17,15 @@ base_path = Path(__file__).parent.parent.parent.resolve()
 
 @hydra.main(config_path=f"{base_path}/config", config_name="digit.yaml", version_base=None)
 def show_point_cloud(cfg):
-    view_params = AttrDict({'fov': 60, 'front': [-0.1, 0.1, 0.1], 'lookat': [
-        -0.001, -0.01, 0.01], 'up': [0.04, -0.05, 0.190], 'zoom': 2.5})
+    # view_params = AttrDict({'fov': 60, 'front': [-0.1, 0.1, 0.1], 'lookat': [
+    #     -0.001, -0.01, 0.01], 'up': [0.04, -0.05, 0.190], 'zoom': 2.5})
+    view_params = AttrDict({
+                "fov": 60,
+                "front": [-0.3, 0.0, 0.5],
+                "lookat": [-0.001, 0.001,-0.001],
+                "up": [0.0, 0.0, 0.50],
+                "zoom": 0.5,
+            })
     vis3d = vis_utils.Visualizer3d(base_path=base_path, view_params=view_params)
 
     # projection params
