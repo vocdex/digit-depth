@@ -47,7 +47,7 @@ def show_depth(cfg):
         # reconstruct depth
         img_depth = geom_utils._integrate_grad_depth(gradx_img, grady_img, boundary=None, bg_mask=None,max_depth=cfg.max_depth)
         img_depth = img_depth.detach().cpu().numpy() # final depth image for current image
-        # get the first 50 frames and average them to get the zero depth
+        # Get the first 50 frames and average them to get the zero depth
         if dm_zero_counter < 50:
             dm_zero += img_depth
             dm_zero_counter += 1

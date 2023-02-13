@@ -1,7 +1,7 @@
 """
     By default, depth image measures the distance from the camera to the gel surface in meters.
     When the gel is not deformed, the depth value is max depth.When the gel is deformed, this value gets smaller.
-    This node publishes the difference between that max depth(no deformation) and min depth(max deformation).
+    This node publishes the difference betweeb min depth (max deformation) and background depth value(min deformation)
     Note that we multiply by 1000 to convert from meters to millimeters.
 """
 import hydra
@@ -59,19 +59,27 @@ def publish_depth_difference(model, cfg, pub):
     digit = DigitSensor(cfg.sensor.fps, cfg.sensor.resolution, cfg.sensor.serial_num)
     digit_call = digit()
     try:
+        dp_zero = 0
+        dp_zero_counter = 0
         while not rospy.is_shutdown():
             frame = digit_call.get_frame()
             if frame is None:
                 continue
 
+            # dp_zero is the "background" depth value.
+            if dp_zero_counter < 100:
+                img_depth = get_depth_values(cfg,model, frame)
+                dp_zero += np.min(img_depth)
+                dp_zero_counter += 1
+                continue
+            elif dp_zero_counter == 100:
+                dp_zero = dp_zero / 100
+                dp_zero_counter += 1
             img_depth = get_depth_values(cfg,model, frame)
-            max_depth = np.min(img_depth)
-            print(f"Max depth : {max_depth}")
-            min_depth = np.max(img_depth)
-            print(f"Min depth : {min_depth}")
-            depth_difference = np.abs((max_depth - min_depth))
-            pub.publish(Float32(depth_difference * 1000))  # convert to mm
-            # pub.publish(Float32(max_depth * 1000)) # you can also publish the max depth
+            max_deformation = np.min(img_depth)
+            print(f"Max deformation : {max_deformation}")
+            actual_deformation = np.abs((max_deformation - dp_zero))
+            pub.publish(Float32(actual_deformation * 1000))  # convert to mm
             rospy.loginfo(f"Published msg at {rospy.get_time()}")
 
     except KeyboardInterrupt:
