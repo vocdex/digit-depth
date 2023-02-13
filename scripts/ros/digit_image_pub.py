@@ -16,7 +16,7 @@ class ImageFeature:
                                          CompressedImage, queue_size=10)
         self.br = CvBridge()
 
-@hydra.main(config_path=base_path / "config", config_name="config")
+@hydra.main(config_path=base_path / "config", config_name="digit.yaml")
 def rgb_pub(cfg):
     digit_sensor = DigitSensor(cfg.sensor.fps, "QVGA", cfg.sensor.serial_num)
     ic = ImageFeature()

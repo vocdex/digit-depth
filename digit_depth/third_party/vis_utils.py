@@ -12,6 +12,7 @@ import open3d as o3d
 import torch
 from attrdict import AttrDict
 from matplotlib.patches import Circle, Rectangle
+from queue import Empty
 
 log = logging.getLogger(__name__)
 
@@ -370,3 +371,87 @@ def visualize_imgs(fig, axs, img_list, titles=None, cmap=None):
             fig.colorbar(im, ax=axs[idx])
         if titles is not None:
             axs[idx].set_title(titles[idx])
+
+
+
+class ContactArea:
+    def __init__(
+     self,contour_threshold=50, *args, **kwargs
+    ):
+        self.contour_threshold = contour_threshold
+
+    def __call__(self, target):
+        ret, th = cv2.threshold(target, 0.03, 255, 1)
+        ret3, thresh = cv2.threshold(th, 150, 255, cv2.THRESH_BINARY)
+        thresh = thresh.astype(np.uint8)
+        contours, _= cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        result = self._compute_contact_area(contours, self.contour_threshold)
+        if result is None:
+            return 
+        else:
+            (poly,major_axis,major_axis_end,minor_axis,minor_axis_end,theta) = result
+            self._draw_major_minor(target, poly, major_axis, major_axis_end, minor_axis, minor_axis_end)
+            return  theta
+
+
+    def _draw_major_minor(self,target,poly,major_axis,major_axis_end,minor_axis,minor_axis_end,lineThickness=2):
+        """
+           Args:
+                 target_img: image to draw on,
+                 poly: polygon of the ellipse,
+                 major_axis: major axis of the ellipse,
+                 major_axis_end: end point of the major axis,
+                 minor_axis: minor axis of the ellipse,
+                 minor_axis_end: end point of the minor axis,
+                 lineThickness: thickness of the line
+           Return: image with major and minor axis drawn
+        """
+        cv2.polylines(target, [poly], True, (255, 255, 255), lineThickness)
+        cv2.line(
+            target,
+            (int(major_axis_end[0]), int(major_axis_end[1])),
+            (int(major_axis[0]), int(major_axis[1])),
+            (255, 0, 0),  # blue color
+            lineThickness,
+        )
+        cv2.line(
+            target,
+            (int(minor_axis_end[0]), int(minor_axis_end[1])),
+            (int(minor_axis[0]), int(minor_axis[1])),
+            (0, 255, 0),  # green color
+            lineThickness,
+        )
+        
+
+    def _compute_contact_area(self, contours, contour_threshold):
+        """ Args: contours: list of contours
+            Return: poly2, major_axis, minor_axis, major_axis_end, minor_axis_end
+        """
+
+        for contour in contours:
+            if len(contour) > contour_threshold:
+                ellipse = cv2.fitEllipse(contour)
+                if ellipse is Empty:
+                    poly2, major_axis, major_axis_end, minor_axis, minor_axis_end,theta_degree=[0],[0],[0],[0],[0],0
+                    return poly2, major_axis, major_axis_end, minor_axis, minor_axis_end,theta_degree
+                else:
+                    poly2 = cv2.ellipse2Poly((int(ellipse[0][0]), int(ellipse[0][1])),
+                        (int(ellipse[1][0] / 2), int(ellipse[1][1] / 2)),
+                        int(ellipse[2]),
+                        0,
+                        360,
+                        5,
+                    )
+                    center = np.array([ellipse[0][0], ellipse[0][1]])
+                    a, b = (ellipse[1][0] / 2), (ellipse[1][1] / 2)
+                    theta = (ellipse[2] / 180.0) * np.pi
+                    major_axis = np.array(
+                        [center[0] - b * np.sin(theta), center[1] + b * np.cos(theta)]
+                    )
+                    minor_axis = np.array(
+                        [center[0] + a * np.cos(theta), center[1] + a * np.sin(theta)]
+                    )
+                    major_axis_end = 2 * center - major_axis
+                    minor_axis_end = 2 * center - minor_axis
+                    theta_degree=ellipse[2]
+                    return poly2, major_axis, major_axis_end, minor_axis, minor_axis_end,theta_degree

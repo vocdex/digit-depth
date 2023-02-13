@@ -44,6 +44,7 @@ save_csv: False
 visualize:
   normals: True
   points3d: True
+  ellipse: True
 
 dataloader:
   batch_size: 1
