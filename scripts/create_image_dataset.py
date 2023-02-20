@@ -21,8 +21,9 @@ base_path = Path(__file__).parent.parent.resolve()
 @hydra.main(config_path=f"{base_path}/config", config_name="digit.yaml", version_base=None)
 def main(cfg):
     annot_file = base_path/"csv"/"annotate.csv"
+    cfg.dataloader.annot_file = annot_file
     normal_dataloader, normal_dataset = data_loader(
-        dir_dataset=os.path.join(base_path, "images"), annot_file=annot_file, params=cfg.dataloader
+        dir_dataset=os.path.join(base_path, "images"), params=cfg.dataloader
     )
     dirs = [
         f"{base_path}/datasets/A/imgs",
