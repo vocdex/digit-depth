@@ -51,6 +51,7 @@ dataloader:
   shuffle: False
   num_workers: 8
   annot_flag: True
+  annot_file: "annotate.csv"
 dataset:
   dataset_type: 'imgs'
   save_dataset: True
