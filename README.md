@@ -37,16 +37,16 @@ This codebase has a script that will replace manual labeling and model training 
 - Add a Monocular Depth model to generate depth maps from RGB images.
 ## Config files
 There are a number of configs params to be edited before you can run the scripts. This is the rough execution order:
-- python scripts/mm_to_pix.py : This script will help you calculate the mm_to_pix value for your sensor. You need to place a caliper on the sensor and press SPACEBAR to capture the image. Then, you need to enter the distance between the two ends of the caliper in mm. This will give you the mm_to_pix value for your sensor.Replace the value in config/digit.yaml file.
+- `python scripts/mm_to_pix.py` : This script will help you calculate the mm_to_pix value for your sensor. You need to place a caliper on the sensor and press SPACEBAR to capture the image. Then, you need to enter the distance between the two ends of the caliper in mm. This will give you the mm_to_pix value for your sensor.Replace the value in config/digit.yaml file.
 Other config params in digit.yaml:
-- gel_height: Height of the gel in mm
-- gel_width: Width of the gel in mm
-- gel_thickness: Thickness of the gel in mm
-- gel_min_depth: Minimum depth of the gel in mm (max deformation)
-- ball_diameter: Diameter of the calibration ball in mm
-- max_depth: Maximum depth of the gel in mm (min deformation)
-- sensor/serial_num: Serial number of the sensor
-- sensor/fps: Frames per second of the sensor. Default is 30. There are some issues with 60 FPS.
+- `gel_height`: Height of the gel in mm
+- `gel_width`: Width of the gel in mm
+- `gel_thickness`: Thickness of the gel in mm
+- `gel_min_depth`: Minimum depth of the gel in mm (max deformation)
+- `ball_diameter`: Diameter of the calibration ball in mm
+- `max_depth`: Maximum depth of the gel in mm (min deformation)
+- `sensor/serial_num`: Serial number of the sensor
+- `sensor/fps`: Frames per second of the sensor. Default is 30. There are some issues with 60 FPS.
 
 ## Usage
 Be careful about python path. It is assumed that you run all the scripts from the package folder(/digit-depth) 
